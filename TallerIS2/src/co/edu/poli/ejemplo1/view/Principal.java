@@ -2,6 +2,7 @@ package co.edu.poli.ejemplo1.view;
 
 import co.edu.poli.ejemplo1.controller.ClienteController;
 import co.edu.poli.ejemplo1.controller.ProductoController;
+import co.edu.poli.ejemplo1.services.GestionConexion;
 
 public class Principal {
 
@@ -27,5 +28,8 @@ public class Principal {
 		// Llamada al método para crear un cliente y mostrar el mensaje de resultado
 		System.out.println(cc.Actioncrear());
 		System.out.println(pc.crearProducto());
+
+		// Mostrar el mensaje de error de la conexión
+		System.out.println(GestionConexion.getMensajeError());
 	}
 }

@@ -2,6 +2,7 @@ package co.edu.poli.ejemplo1.view;
 
 import co.edu.poli.ejemplo1.controller.ClienteController;
 import co.edu.poli.ejemplo1.controller.ProductoController;
+import co.edu.poli.ejemplo1.services.GestionConexion;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -32,5 +33,7 @@ public class Main {
 		System.out.println(mensaje);
 		System.out.println(msj);
 
+		// Mostrar el mensaje de error de la conexión
+		System.out.println(GestionConexion.getMensajeError());
 	}
 }
