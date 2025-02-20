@@ -1,9 +1,13 @@
 package co.edu.poli.ejemplo1.model;
 
 /**
- * Clase que representa al Cliente, el cual puede realizar Pedidos.
+ * SRP: Clase que representa al Cliente, el cual puede realizar Pedidos.
  */
 public class Cliente {
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	private String id;
 	private String nombre;
@@ -29,10 +33,10 @@ public class Cliente {
 	}
 
 	/**
-	 * Devuelve una representación en forma de cadena del objeto Cliente.
-	 * Incluye el ID y el nombre del cliente en un formato legible.
+	 * Devuelve una representación en forma de cadena del objeto Cliente. Incluye el
+	 * ID y el nombre del cliente en un formato legible.
 	 *
-	 * @return Una cadena que representa al cliente en el formato: 
+	 * @return Una cadena que representa al cliente en el formato:
 	 *         Cliente{ID='valor_id', Nombre='valor_nombre'}
 	 */
 	@Override
