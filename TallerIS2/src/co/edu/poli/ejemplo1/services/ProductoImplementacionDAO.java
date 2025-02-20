@@ -14,7 +14,7 @@ import co.edu.poli.ejemplo1.model.Producto;
 public class ProductoImplementacionDAO implements DAOCrud<Producto> {
 
 	/**
-	 * Inserta un nuevo producto en la base de datos.
+	 * Inserta un nuevo producto en la base de datos de MySQL
 	 *
 	 * @param producto El objeto Producto a insertar.
 	 */
