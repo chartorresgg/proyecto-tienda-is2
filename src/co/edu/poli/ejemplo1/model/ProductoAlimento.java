@@ -4,6 +4,7 @@ package co.edu.poli.ejemplo1.model;
  * Clase que representa un Producto de Aporte Calórico en la aplicación.
  */
 public class ProductoAlimento extends Producto {
+	
 	private int calorias;
 
 	/**

@@ -10,14 +10,15 @@ import co.edu.poli.ejemplo1.services.ProductoImplementacionDAO;
  * Controlador para gestionar las operaciones relacionadas con los productos.
  */
 public class ProductoController {
-	private GenericDAO<Producto, String> productoDAO; // Se usa la interfaz DAOCrud
+	private GenericDAO<Producto, String> productoDAO; // Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 
 	/**
 	 * Constructor de la clase ProductoController. Inicializa una instancia de
 	 * ProductoImplementacionDAO para manejar las operaciones de base de datos.
 	 */
 	public ProductoController() {
-		productoDAO = new ProductoImplementacionDAO(); // Polimorfismo: instancia concreta
+		
+		productoDAO = new ProductoImplementacionDAO(); // Polimorfismo: asignación de una subclase a una variable de la superclase (Interfaz).
 	}
 
 	/**
@@ -29,7 +30,7 @@ public class ProductoController {
 	 */
 	public String crearProducto() {
 
-		Producto producto = new Producto("iMac", "iMac 29 pulgadas");
+		Producto producto = new Producto("iMac 000000", "iMac 00  pulgadas");
 		try {
 			productoDAO.create(producto);
 			return "Producto creado con ID: " + producto.getId() + " y con nombre: " + producto.getDescripcion();

@@ -13,23 +13,24 @@ import co.edu.poli.ejemplo1.model.Producto;
  * Implementación de la interfaz DAOCrud para gestionar operaciones CRUD de la
  * entidad Producto en la base de datos.
  */
-public class ProductoImplementacionDAO implements GenericDAO<Producto, String> {
+public class ProductoImplementacionDAO implements GenericDAO<Producto, String>, ProductoDAO {
 
 	/**
 	 * Inserta un nuevo producto en la base de datos de MySQL
 	 *
 	 * @param producto El objeto Producto a insertar.
+	 * @throws SQLException
 	 */
 	@Override
-	public void create(Producto producto) {
+	public void create(Producto producto) throws SQLException {
 		String sql = "INSERT INTO Producto (id, descripcion) VALUES (?, ?)";
 
-		try (Connection conn = GestionConexion.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+		Connection conn = GestionConexion.obtenerConexion();
+		if (conn == null) {
+			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+		}
 
-			if (conn == null) {
-				throw new SQLException("No se pudo obtener conexión a la base de datos.");
-			}
-
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setString(1, producto.getId());
 			stmt.setString(2, producto.getDescripcion());
 
@@ -39,9 +40,9 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String> {
 			} else {
 				System.out.println("No se pudo insertar el producto.");
 			}
-
 		} catch (SQLException e) {
 			System.err.println("Error al insertar el producto: " + e.getMessage());
+			throw e;
 		}
 	}
 
@@ -89,14 +90,32 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String> {
 		return null;
 	}
 
+	/**
+	 * Busca productos en la base de datos cuyo precio sea mayor al valor
+	 * especificado.
+	 *
+	 * @param price Precio mínimo de los productos a buscar.
+	 * @return Una lista de productos cuyo precio es mayor al valor especificado.
+	 * @throws SQLException Si ocurre un error al acceder a la base de datos.
+	 */
 	@Override
 	public List<Producto> findByPriceGreaterThan(double price) throws SQLException {
+
 		List<Producto> productos = new ArrayList<>();
 		String sql = "SELECT id, descripcion FROM Producto WHERE precio > ?";
-		try (Connection conn = GestionConexion.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-			if (conn == null) {
-				throw new SQLException("No se pudo obtener conexión a la base de datos.");
-			}
+
+		// Se obtiene una conexión a la base de datos y se prepara la consulta SQL.
+		// Se usa PreparedStatement para evitar inyección de SQL.
+		Connection conn = GestionConexion.obtenerConexion();
+		if (conn == null) {
+			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+		}
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			// Se asigna el valor del precio con stmt.setDouble() y se ejecuta la consulta
+			// con stmt.executeQuery().
+			// Se recorre el ResultSet y se crea un objeto Producto con los datos obtenidos.
+			// Se añade el objeto Producto a la lista de productos.
 			stmt.setDouble(1, price);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {

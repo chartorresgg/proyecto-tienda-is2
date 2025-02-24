@@ -3,6 +3,7 @@ package co.edu.poli.ejemplo1.model;
 /**
  * Clase que representa un Producto en la aplicación.
  */
+
 public class Producto {
 	private String id;
 	private String descripcion;

@@ -39,9 +39,4 @@ public class ClienteImplementacionDAO implements GenericDAO<Cliente, String> {
 	public List<Cliente> findAll() throws SQLException {
 		return null;
 	}
-
-	@Override
-	public List<Cliente> findByPriceGreaterThan(double price) throws SQLException {
-		return null;
-	}
 }

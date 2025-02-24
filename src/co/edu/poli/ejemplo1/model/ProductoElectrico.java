@@ -4,6 +4,7 @@ package co.edu.poli.ejemplo1.model;
  * Clase que representa un Producto Eléctrico en la aplicación.
  */
 public class ProductoElectrico extends Producto {
+
 	private double voltajeEntrada;
 
 	/**

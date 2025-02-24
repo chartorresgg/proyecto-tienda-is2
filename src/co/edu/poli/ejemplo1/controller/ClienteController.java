@@ -11,14 +11,14 @@ import co.edu.poli.ejemplo1.services.GenericDAO;
  */
 public class ClienteController {
 
-	private GenericDAO<Cliente, String> clienteDAO; // Se usa la interfaz DAOCrud para aplicar polimorfismo
+	private GenericDAO<Cliente, String> clienteDAO; // Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 
 	/**
 	 * Constructor de la clase ClienteController. Inicializa una instancia de
 	 * ClienteImplementacionDAO para manejar las operaciones de base de datos.
 	 */
 	public ClienteController() {
-		this.clienteDAO = new ClienteImplementacionDAO();
+		this.clienteDAO = new ClienteImplementacionDAO(); // Polimorfismo: asignación de una subclase a una variable de la superclase (interfaz).
 	}
 
 	/**
@@ -29,8 +29,8 @@ public class ClienteController {
 	 *         su ID.
 	 * @throws IOException
 	 */
-	public String actionCrear() throws IOException {
-		Cliente cliente = new Cliente("42", "Charles");
+	public String crearCliente() throws IOException {
+		Cliente cliente = new Cliente("45", "Carlitos");
 		try {
 			clienteDAO.create(cliente);
 			return "Cliente creado con ID: " + cliente.getId() + " y con nombre de cliente: " + cliente.getNombre();

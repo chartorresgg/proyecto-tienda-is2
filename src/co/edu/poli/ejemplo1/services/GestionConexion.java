@@ -1,77 +1,72 @@
 package co.edu.poli.ejemplo1.services;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GestionConexion {
 
+	private static final Logger LOGGER = Logger.getLogger(GestionConexion.class.getName());
 	private static Connection conexion;
-	private static String mensajeError;
+	private static final Properties propiedades = new Properties();
 
 	private GestionConexion() {
 	}
 
-	public static Connection obtenerConexion() {
-		if (conexion == null) {
-			try {
-				Properties propiedades = new Properties();
-				FileInputStream entrada = new FileInputStream("config/database.properties");
-				propiedades.load(entrada);
+	private static void cargarPropiedades() {
+		if (propiedades.isEmpty()) {
+			try (InputStream input = GestionConexion.class.getClassLoader()
+					.getResourceAsStream("database.properties")) {
+				if (input == null) {
+					throw new IOException("El archivo database.properties no se encontró en el classpath.");
+				}
+				propiedades.load(input);
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, "Error al cargar las propiedades de conexión", e);
+			}
+		}
+	}
 
+	public static synchronized Connection obtenerConexion() throws SQLException {
+		if (conexion == null || esConexionCerrada()) {
+			cargarPropiedades();
+			try {
 				String URL = propiedades.getProperty("db.url");
 				String USUARIO = propiedades.getProperty("db.user");
 				String CONTRASEÑA = propiedades.getProperty("db.password");
 
 				conexion = DriverManager.getConnection(URL, USUARIO, CONTRASEÑA);
-				mensajeError = "Conexión a la base de datos establecida.";
-
-			} catch (IOException e) {
-				mensajeError = "Error al leer el archivo de propiedades: " + e.getMessage();
+				LOGGER.info("Conexión a la base de datos establecida.");
 			} catch (SQLException e) {
-				mensajeError = "Error al conectar con la base de datos: " + e.getMessage();
-			}
-		} else {
-			try {
-				if (conexion.isClosed()) {
-					Properties propiedades = new Properties();
-					FileInputStream entrada = new FileInputStream("config/database.properties");
-					propiedades.load(entrada);
-
-					String URL = propiedades.getProperty("db.url");
-					String USUARIO = propiedades.getProperty("db.user");
-					String CONTRASEÑA = propiedades.getProperty("db.password");
-
-					conexion = DriverManager.getConnection(URL, USUARIO, CONTRASEÑA);
-					mensajeError = "Conexión a la base de datos restablecida.";
-				}
-			} catch (SQLException | IOException e) {
-				mensajeError = "Error al verificar o restablecer la conexión: " + e.getMessage();
+				LOGGER.log(Level.SEVERE, "Error al conectar a la base de datos", e);
+				throw new SQLException("Error al conectar con la base de datos: " + e.getMessage(), e);
 			}
 		}
 		return conexion;
 	}
 
-	public Connection getConnection() {
-		return conexion;
+	private static boolean esConexionCerrada() {
+		try {
+			return conexion == null || conexion.isClosed();
+		} catch (SQLException e) {
+			LOGGER.log(Level.SEVERE, "Error al verificar la conexión", e);
+			return true;
+		}
 	}
 
 	public static void cerrarConexion() {
 		if (conexion != null) {
-			try {
-				conexion.close();
+			try (Connection conn = conexion) {
 				conexion = null;
-				mensajeError = "Conexión cerrada correctamente.";
+				LOGGER.info("Conexión cerrada correctamente.");
 			} catch (SQLException e) {
-				mensajeError = "Error al cerrar la conexión: " + e.getMessage();
+				LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
 			}
 		}
-	}
-
-	public static String getMensajeError() {
-		return mensajeError;
 	}
 }
