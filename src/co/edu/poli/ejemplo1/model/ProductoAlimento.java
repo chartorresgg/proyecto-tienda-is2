@@ -47,6 +47,6 @@ public class ProductoAlimento extends Producto {
 	 */
 	@Override
 	public String obtenerTipo() {
-		return "Alimento";
+		return "Tipo de producto: Alimento";
 	}
 }

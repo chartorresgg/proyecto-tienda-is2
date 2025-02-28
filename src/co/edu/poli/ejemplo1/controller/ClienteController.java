@@ -30,7 +30,7 @@ public class ClienteController {
 	 * @throws IOException 
 	 */
 	public String crearCliente() throws IOException {
-		Cliente cliente = new Cliente("51", "Isabel");
+		Cliente cliente = new Cliente("53", "Juana");
 		try {
 			clienteDAO.create(cliente);
 			return "Cliente creado con ID: " + cliente.getId() + " y con nombre de cliente: " + cliente.getNombre();

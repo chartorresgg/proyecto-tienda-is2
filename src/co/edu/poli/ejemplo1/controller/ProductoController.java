@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import co.edu.poli.ejemplo1.model.ProductFactory;
 import co.edu.poli.ejemplo1.model.Producto;
 import co.edu.poli.ejemplo1.services.GenericDAO;
+import co.edu.poli.ejemplo1.services.ProductoDAO;
 import co.edu.poli.ejemplo1.services.ProductoImplementacionDAO;
 
 /**
@@ -14,7 +15,7 @@ public class ProductoController {
 
 	// Interfaz DAO que permite la manipulación de productos en la base de datos
 	// mediante polimorfismo.
-	private GenericDAO<Producto, String> productoDAO;
+	private ProductoDAO productoDAO;
 
 	// Fábrica de productos utilizada para instanciar diferentes tipos de productos.
 	private ProductFactory productoFactory;
@@ -28,7 +29,7 @@ public class ProductoController {
 	 *                        Alimento o Eléctrico).
 	 */
 	public ProductoController(ProductFactory productoFactory) {
-		// Se usa polimorfismo al asignar una implementación concreta de GenericDAO.
+
 		this.productoDAO = new ProductoImplementacionDAO();
 		this.productoFactory = productoFactory;
 	}
@@ -60,7 +61,7 @@ public class ProductoController {
 			return "Producto creado en la base de datos: " + producto.toString();
 		} catch (SQLException e) {
 			// Captura y lanza una excepción en caso de error en la base de datos.
-			throw new RuntimeException("Error al guardar el producto en la base de datos: " + e.getMessage(), e);
+			return "Error al guardar el producto en la base de datos: " + e.getMessage();
 		}
 	}
 }
