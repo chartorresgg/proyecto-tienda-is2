@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.poli.ejemplo1.model.Producto;
+import co.edu.poli.ejemplo1.model.ProductoAlimento;
 
 /**
  * Implementación de la interfaz DAOCrud para gestionar operaciones CRUD de la
@@ -121,7 +122,7 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String>, 
 			while (rs.next()) {
 				String id = rs.getString("id");
 				String descripcion = rs.getString("descripcion");
-				Producto producto = new Producto(id, descripcion);
+				Producto producto = new ProductoAlimento(id, descripcion, 0);
 				productos.add(producto);
 			}
 		} catch (SQLException e) {

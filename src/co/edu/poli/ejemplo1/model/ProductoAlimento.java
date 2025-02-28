@@ -1,18 +1,19 @@
 package co.edu.poli.ejemplo1.model;
 
 /**
- * Clase que representa un Producto de Aporte Calórico en la aplicación.
+ * Clase que representa un Producto de Aporte Calórico en la aplicación. Hereda
+ * de la clase Producto e incorpora un atributo adicional: calorías.
  */
 public class ProductoAlimento extends Producto {
-	
-	private int calorias;
+
+	private int calorias; // Cantidad de calorías del producto.
 
 	/**
 	 * Constructor de la clase ProductoAlimento.
 	 * 
-	 * @param id
-	 * @param descripcion
-	 * @param calorias
+	 * @param id          Identificador del producto.
+	 * @param descripcion Descripción del producto.
+	 * @param calorias    Cantidad de calorías.
 	 */
 	public ProductoAlimento(String id, String descripcion, int calorias) {
 		super(id, descripcion);
@@ -29,14 +30,23 @@ public class ProductoAlimento extends Producto {
 	}
 
 	/**
-	 * Retorna una representación en forma de cadena del objeto ProductoAlimento.
+	 * Representación en cadena del objeto ProductoAlimento.
 	 * 
-	 * @return Una cadena que contiene el id, la descripción y las calorías del
-	 *         producto.
+	 * @return Cadena con el id, descripción y calorías del producto.
 	 */
 	@Override
 	public String toString() {
 		return "ProductoAlimento{" + "id='" + getId() + "', descripcion='" + getDescripcion() + "', calorias="
 				+ calorias + "}";
+	}
+
+	/**
+	 * Implementación del método obtenerTipo para identificar el tipo de producto.
+	 * 
+	 * @return "Alimento".
+	 */
+	@Override
+	public String obtenerTipo() {
+		return "Alimento";
 	}
 }

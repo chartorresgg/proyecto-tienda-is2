@@ -1,18 +1,19 @@
 package co.edu.poli.ejemplo1.model;
 
 /**
- * Clase que representa un Producto Eléctrico en la aplicación.
+ * Clase que representa un Producto Eléctrico en la aplicación. Hereda de
+ * Producto y añade el atributo voltaje de entrada.
  */
 public class ProductoElectrico extends Producto {
 
-	private double voltajeEntrada;
+	private double voltajeEntrada; // Voltaje de entrada del producto.
 
 	/**
 	 * Constructor de la clase ProductoElectrico.
 	 * 
-	 * @param id
-	 * @param descripcion
-	 * @param voltajeEntrada
+	 * @param id             Identificador del producto.
+	 * @param descripcion    Descripción del producto.
+	 * @param voltajeEntrada Voltaje de entrada del producto.
 	 */
 	public ProductoElectrico(String id, String descripcion, double voltajeEntrada) {
 		super(id, descripcion);
@@ -29,14 +30,23 @@ public class ProductoElectrico extends Producto {
 	}
 
 	/**
-	 * Retorna una representación en forma de cadena del objeto ProductoElectrico.
+	 * Representación en cadena del objeto ProductoElectrico.
 	 * 
-	 * @return Una cadena que contiene el id, la descripción y el voltaje de entrada
-	 *         del producto.
+	 * @return Cadena con el id, descripción y voltaje de entrada.
 	 */
 	@Override
 	public String toString() {
 		return "ProductoElectrico{" + "id='" + getId() + "', descripcion='" + getDescripcion() + "', voltajeEntrada="
 				+ voltajeEntrada + "}";
+	}
+
+	/**
+	 * Implementación del método obtenerTipo para identificar el tipo de producto.
+	 * 
+	 * @return "Eléctrico".
+	 */
+	@Override
+	public String obtenerTipo() {
+		return "Eléctrico";
 	}
 }

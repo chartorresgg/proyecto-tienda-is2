@@ -6,8 +6,10 @@ import java.sql.SQLException;
 import java.util.List;
 import co.edu.poli.ejemplo1.model.Cliente;
 
+// Implementación de la interfaz GenericDAO para la entidad Cliente
 public class ClienteImplementacionDAO implements GenericDAO<Cliente, String> {
 
+	// Inserta un nuevo cliente en la base de datos
 	@Override
 	public void create(Cliente cliente) {
 		String sql = "INSERT INTO Cliente (id, nombre) VALUES (?, ?)";

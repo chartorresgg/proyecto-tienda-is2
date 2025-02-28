@@ -10,7 +10,5 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		AppInitializer appInitializer = new AppInitializer();
 		appInitializer.initialize();
-		
-		
 	}
 }

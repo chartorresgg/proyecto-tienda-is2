@@ -3,6 +3,7 @@ package co.edu.poli.ejemplo1.view;
 import java.io.IOException;
 import co.edu.poli.ejemplo1.controller.ClienteController;
 import co.edu.poli.ejemplo1.controller.ProductoController;
+import co.edu.poli.ejemplo1.model.FoodProductFactory;
 
 /**
  * Clase principal que ejecuta la aplicación.
@@ -10,10 +11,10 @@ import co.edu.poli.ejemplo1.controller.ProductoController;
 public class Principal {
 
 	// Variable que almacena un identificador de cliente (valor por defecto "5")
-    public static String txtid = "5";
+	public static String txtid = "5";
 
-    // Variable que almacena el nombre del cliente (valor por defecto "5")
-    public static String txtname = "5";
+	// Variable que almacena el nombre del cliente (valor por defecto "5")
+	public static String txtname = "5";
 
 	/**
 	 * Método principal que ejecuta la aplicación. Crea una instancia del
@@ -27,10 +28,10 @@ public class Principal {
 
 		// Creación del controlador de cliente
 		ClienteController cc = new ClienteController();
-		ProductoController pc = new ProductoController();
+		ProductoController pc = new ProductoController(new FoodProductFactory(500));
 
 		// Llamada al método para crear un cliente y mostrar el mensaje de resultado
 		System.out.println(cc.crearCliente());
-		System.out.println(pc.crearProducto());
+		System.out.println(pc.createProduct(txtid, txtid));
 	}
 }

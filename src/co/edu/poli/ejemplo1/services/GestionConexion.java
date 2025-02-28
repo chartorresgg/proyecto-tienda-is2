@@ -20,8 +20,7 @@ public class GestionConexion {
 
 	private static void cargarPropiedades() {
 		if (propiedades.isEmpty()) {
-			try (InputStream input = GestionConexion.class.getClassLoader()
-					.getResourceAsStream("database.properties")) {
+			try (InputStream input = GestionConexion.class.getClassLoader().getResourceAsStream("database.properties")) {
 				if (input == null) {
 					throw new IOException("El archivo database.properties no se encontró en el classpath.");
 				}
@@ -32,6 +31,12 @@ public class GestionConexion {
 		}
 	}
 
+	/**
+	 * Obtiene una conexión a la base de datos.
+	 *
+	 * @return La conexión a la base de datos.
+	 * @throws SQLException Si ocurre un error al conectar a la base de datos.
+	 */
 	public static synchronized Connection obtenerConexion() throws SQLException {
 		if (conexion == null || esConexionCerrada()) {
 			cargarPropiedades();

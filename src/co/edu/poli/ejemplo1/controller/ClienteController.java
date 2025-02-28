@@ -27,10 +27,10 @@ public class ClienteController {
 	 *
 	 * @return Un mensaje indicando que el cliente fue creado exitosamente junto con
 	 *         su ID.
-	 * @throws IOException
+	 * @throws IOException 
 	 */
 	public String crearCliente() throws IOException {
-		Cliente cliente = new Cliente("45", "Carlitos");
+		Cliente cliente = new Cliente("51", "Isabel");
 		try {
 			clienteDAO.create(cliente);
 			return "Cliente creado con ID: " + cliente.getId() + " y con nombre de cliente: " + cliente.getNombre();

@@ -1,18 +1,18 @@
 package co.edu.poli.ejemplo1.model;
 
 /**
- * Clase que representa un Producto en la aplicación.
+ * Clase abstracta que representa un Producto en la aplicación. Define atributos
+ * y métodos básicos que deben implementar las subclases.
  */
-
-public class Producto {
-	private String id;
-	private String descripcion;
+public abstract class Producto {
+	private String id; // Identificador único del producto.
+	private String descripcion; // Descripción del producto.
 
 	/**
 	 * Constructor de la clase Producto.
 	 * 
-	 * @param id
-	 * @param descripcion
+	 * @param id          Identificador del producto.
+	 * @param descripcion Descripción del producto.
 	 */
 	public Producto(String id, String descripcion) {
 		this.id = id;
@@ -35,6 +35,13 @@ public class Producto {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+
+	/**
+	 * Método abstracto que debe ser implementado por las subclases.
+	 * 
+	 * @return Tipo del producto.
+	 */
+	public abstract String obtenerTipo();
 
 	/**
 	 * Retorna una representación en forma de cadena del objeto Producto.
