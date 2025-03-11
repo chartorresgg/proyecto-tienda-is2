@@ -4,7 +4,7 @@ package co.edu.poli.ejemplo1.model;
  * Clase abstracta que representa un Producto en la aplicación. Define atributos
  * y métodos básicos que deben implementar las subclases.
  */
-public abstract class Producto {
+public abstract class Producto implements Prototype {
 	private String id; // Identificador único del producto.
 	private String descripcion; // Descripción del producto.
 
@@ -42,6 +42,9 @@ public abstract class Producto {
 	 * @return Tipo del producto.
 	 */
 	public abstract String obtenerTipo();
+	
+	@Override
+    public abstract Producto clone();  
 
 	/**
 	 * Retorna una representación en forma de cadena del objeto Producto.

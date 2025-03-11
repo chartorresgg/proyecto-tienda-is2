@@ -39,6 +39,7 @@ public class ProductoAlimento extends Producto {
 		return "ProductoAlimento{" + "id='" + getId() + "', descripcion='" + getDescripcion() + "', calorias="
 				+ calorias + "}";
 	}
+	
 
 	/**
 	 * Implementación del método obtenerTipo para identificar el tipo de producto.
@@ -49,4 +50,11 @@ public class ProductoAlimento extends Producto {
 	public String obtenerTipo() {
 		return "Tipo de producto: Alimento";
 	}
+	
+	
+	@Override
+    public Producto clone() {
+        return new ProductoAlimento(getId(), getDescripcion(), getCalorias());
+    }
+
 }

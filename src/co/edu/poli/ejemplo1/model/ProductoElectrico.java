@@ -39,6 +39,11 @@ public class ProductoElectrico extends Producto {
 		return "ProductoElectrico{" + "id='" + getId() + "', descripcion='" + getDescripcion() + "', voltajeEntrada="
 				+ voltajeEntrada + "}";
 	}
+	
+	@Override
+    public Producto clone() {
+        return new ProductoElectrico(getId(), getDescripcion(), getVoltajeEntrada());
+    }
 
 	/**
 	 * Implementación del método obtenerTipo para identificar el tipo de producto.
