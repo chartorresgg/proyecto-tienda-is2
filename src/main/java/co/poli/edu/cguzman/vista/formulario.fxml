@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.poli.edu.cguzman.controlador.ControladorFormulario">
+   <children>
+      <TextField fx:id="txt_id" layoutX="226.0" layoutY="75.0" promptText="Ingrese el ID del cliente" text="id" />
+      <TextField fx:id="txt_nombres" layoutX="227.0" layoutY="145.0" promptText="Ingrese nombres y apellidos del cliente" text="nombres" />
+      <Button fx:id="btn_guardar" layoutX="275.0" layoutY="264.0" mnemonicParsing="false" onAction="#click" text="Guardar" />
+   </children>
+</AnchorPane>
