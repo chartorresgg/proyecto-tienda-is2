@@ -40,7 +40,7 @@ public class ClienteController {
 //			return "Error al crear el cliente: " + e.getMessage();
 //		}
 //	}
-	
+
 	public String createClient(String id, String nombre) {
 		Cliente cliente = new Cliente(id, nombre);
 		try {
@@ -50,4 +50,52 @@ public class ClienteController {
 			return "Error al crear el cliente: " + e.getMessage();
 		}
 	}
+
+	/**
+	 * Actualiza el nombre de un cliente en la base de datos.
+	 */
+	public String updateClient(String id, String nuevoNombre) {
+		try {
+			// Buscar cliente por ID
+			Cliente clienteExistente = clienteDAO.read(id);
+
+			if (clienteExistente == null) {
+				return "No se encontró un cliente con el ID: " + id;
+			}
+
+			// Actualizar el nombre del cliente
+			clienteExistente.setNombre(nuevoNombre);
+			clienteDAO.update(clienteExistente);
+
+			return "Cliente actualizado con ID: " + id + " y nuevo nombre: " + nuevoNombre;
+		} catch (SQLException e) {
+			return "Error al actualizar el cliente: " + e.getMessage();
+		}
+	}
+
+	/**
+	 * Elimina un cliente por su ID
+	 */
+	public String delete(String id) {
+		try {
+			clienteDAO.delete(id);
+			return "Cliente con ID " + id + " eliminado correctamente.";
+		} catch (SQLException e) {
+			return "Error al eliminar el cliente: " + e.getMessage();
+		}
+	}
+
+	public String read(String id) {
+		try {
+			Cliente cliente = clienteDAO.read(id);
+			if (cliente != null) {
+				return "Cliente encontrado: ID = " + cliente.getId() + ", Nombre = " + cliente.getNombre();
+			} else {
+				return "No se encontró un cliente con el ID: " + id;
+			}
+		} catch (Exception e) {
+			return "Error al leer el cliente: " + e.getMessage();
+		}
+	}
+
 }
