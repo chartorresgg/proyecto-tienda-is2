@@ -1,38 +1,32 @@
 package co.poli.edu.cguzman.controlador;
 
+import java.sql.SQLException;
+
 import co.poli.edu.cguzman.modelo.Cliente;
+import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
+import co.poli.edu.cguzman.services.GenericDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 public class ControladorFormulario {
 
 	@FXML
-	private Button btn_guardar;
+	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar;
+
+	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
+	@FXML
+	private TextField txt_id, txt_nombres;
+
+	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
+	private GenericDAO<Cliente, String> clienteDAO = new ClienteImplementacionDAO();
 
 	@FXML
-	private Button btn_consultar;
-
-	@FXML
-	private Button btn_eliminar; // ✅ Agregado para evitar el error
-
-	@FXML
-	private Button btn_actualizar; // ✅ Agregado para evitar el error
-
-	@FXML
-	private TextField txt_id;
-
-	@FXML
-	private TextField txt_nombres;
-
-	private ClienteController clienteController = new ClienteController();
-
-	@FXML
-	private void click(ActionEvent event) {
-		String id = txt_id.getText();
+	private void crearCliente(ActionEvent event) {
+		
+		String id = txt_id.getText(); // Obtiene 
 		String nombre = txt_nombres.getText();
 
 		if (id.isEmpty() || nombre.isEmpty()) {
@@ -40,11 +34,15 @@ public class ControladorFormulario {
 			return;
 		}
 
-		// Corregimos la llamada a createClient para pasar los parámetros correctamente
-		String mensaje = clienteController.createClient(id, nombre);
-		mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Registrado", mensaje);
-
-		limpiarCampos();
+		Cliente cliente = new Cliente(id, nombre);
+		try {
+			clienteDAO.create(cliente);
+			mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Registrado",
+					"Cliente creado con ID: " + id + " y Nombre: " + nombre);
+			limpiarCampos();
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al crear el cliente", e.getMessage());
+		}
 	}
 
 	@FXML
@@ -57,12 +55,21 @@ public class ControladorFormulario {
 			return;
 		}
 
-		// Llamamos al método de actualización en ClienteController (debes
-		// implementarlo)
-		String mensaje = clienteController.updateClient(id, nombre);
-		mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Actualizado", mensaje);
+		try {
+			Cliente clienteExistente = clienteDAO.read(id);
+			if (clienteExistente == null) {
+				mostrarAlerta(Alert.AlertType.WARNING, "Error", "No se encontró un cliente con ID: " + id);
+				return;
+			}
 
-		limpiarCampos();
+			clienteExistente.setNombre(nombre);
+			clienteDAO.update(clienteExistente);
+			mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Actualizado",
+					"Cliente con ID: " + id + " ahora tiene el nombre: " + nombre);
+			limpiarCampos();
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al actualizar el cliente", e.getMessage());
+		}
 	}
 
 	@FXML
@@ -75,13 +82,12 @@ public class ControladorFormulario {
 		}
 
 		try {
-			clienteController.delete(id);
+			clienteDAO.delete(id);
 			mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Eliminado",
 					"Cliente con ID " + id + " eliminado correctamente.");
 			limpiarCampos();
-		} catch (Exception e) {
-			mostrarAlerta(Alert.AlertType.ERROR, "Error al eliminar",
-					"No se pudo eliminar el cliente: " + e.getMessage());
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al eliminar el cliente", e.getMessage());
 		}
 	}
 
@@ -94,17 +100,18 @@ public class ControladorFormulario {
 			return;
 		}
 
-		String resultado = clienteController.read(id);
-
-		if (resultado.startsWith("Cliente encontrado")) {
-			// Extraer el nombre del cliente del resultado
-			String[] partes = resultado.split(", Nombre = ");
-			if (partes.length == 2) {
-				txt_nombres.setText(partes[1]); // Mostrar el nombre en el campo de texto
+		try {
+			Cliente cliente = clienteDAO.read(id);
+			if (cliente != null) {
+				txt_nombres.setText(cliente.getNombre());
+				mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Encontrado",
+						"ID: " + cliente.getId() + ", Nombre: " + cliente.getNombre());
+			} else {
+				mostrarAlerta(Alert.AlertType.WARNING, "Consulta Fallida",
+						"No se encontró un cliente con el ID: " + id);
 			}
-			mostrarAlerta(Alert.AlertType.INFORMATION, "Consulta Exitosa", resultado);
-		} else {
-			mostrarAlerta(Alert.AlertType.WARNING, "Consulta Fallida", resultado);
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al leer el cliente", e.getMessage());
 		}
 	}
 

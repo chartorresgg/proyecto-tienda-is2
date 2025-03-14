@@ -4,7 +4,7 @@ package co.poli.edu.cguzman.modelo;
  * Clase que representa un Producto de Aporte Calórico en la aplicación. Hereda
  * de la clase Producto e incorpora un atributo adicional: calorías.
  */
-public class ProductoAlimento extends Producto {
+public class ProductoAlimento extends Producto implements Prototype {
 
 	private int calorias; // Cantidad de calorías del producto.
 

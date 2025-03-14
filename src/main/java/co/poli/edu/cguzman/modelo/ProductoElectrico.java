@@ -4,7 +4,7 @@ package co.poli.edu.cguzman.modelo;
  * Clase que representa un Producto Eléctrico en la aplicación. Hereda de
  * Producto y añade el atributo voltaje de entrada.
  */
-public class ProductoElectrico extends Producto {
+public class ProductoElectrico extends Producto implements Prototype {
 
 	private double voltajeEntrada; // Voltaje de entrada del producto.
 

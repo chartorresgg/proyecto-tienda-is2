@@ -8,7 +8,7 @@
    <children>
       <TextField fx:id="txt_id" layoutX="137.0" layoutY="75.0" promptText="Ingrese el ID del cliente" text="id" />
       <TextField fx:id="txt_nombres" layoutX="137.0" layoutY="145.0" promptText="Ingrese nombres y apellidos del cliente" text="nombres" />
-      <Button fx:id="btn_guardar" layoutX="402.0" layoutY="75.0" mnemonicParsing="false" onAction="#click" text="Guardar" />
+      <Button fx:id="btn_guardar" layoutX="402.0" layoutY="75.0" mnemonicParsing="false" onAction="#crearCliente" text="Guardar" />
       <Button fx:id="btn_actualizar" layoutX="398.0" layoutY="145.0" mnemonicParsing="false" onAction="#actualizarCliente" text="Actualizar" />
       <Button fx:id="btn_eliminar" layoutX="403.0" layoutY="200.0" mnemonicParsing="false" onAction="#eliminarCliente" text="Eliminar" />
       <Button fx:id="btn_consultar" layoutX="399.0" layoutY="264.0" mnemonicParsing="false" onAction="#consultarCliente" text="Consultar" />
