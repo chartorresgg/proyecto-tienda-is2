@@ -10,8 +10,6 @@ import java.util.List;
 import co.poli.edu.cguzman.modelo.Producto;
 import co.poli.edu.cguzman.modelo.ProductoAlimento;
 
-
-
 /**
  * Implementación de la interfaz DAOCrud para gestionar operaciones CRUD de la
  * entidad Producto en la base de datos.
@@ -56,8 +54,24 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String>, 
 	 * @return El objeto Producto si se encuentra, de lo contrario, null.
 	 */
 	@Override
-	public Producto read(String id) {
-		// Implementación pendiente
+	public Producto read(String id) throws SQLException {
+		String sql = "SELECT * FROM Producto WHERE id = ?";
+		Connection conn = GestionConexion.obtenerConexion();
+		if (conn == null) {
+			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+		}
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, id);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				return new ProductoAlimento(rs.getString("id"), rs.getString("descripcion"), 0);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al leer el producto: " + e.getMessage());
+			throw e;
+		}
 		return null;
 	}
 
@@ -67,8 +81,25 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String>, 
 	 * @param producto El objeto Producto con los datos actualizados.
 	 */
 	@Override
-	public void update(Producto producto) {
-		// Implementación pendiente
+	public void update(Producto producto) throws SQLException {
+		String sql = "UPDATE Producto SET descripcion = ? WHERE id = ?";
+		Connection conn = GestionConexion.obtenerConexion();
+		if (conn == null) {
+			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+		}
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, producto.getDescripcion());
+			stmt.setString(2, producto.getId());
+
+			int filasAfectadas = stmt.executeUpdate();
+			if (filasAfectadas == 0) {
+				throw new SQLException("No se encontró el producto para actualizar.");
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al actualizar el producto: " + e.getMessage());
+			throw e;
+		}
 	}
 
 	/**
@@ -77,8 +108,24 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String>, 
 	 * @param id Identificador del producto a eliminar.
 	 */
 	@Override
-	public void delete(String id) {
-		// Implementación pendiente
+	public void delete(String id) throws SQLException {
+		String sql = "DELETE FROM Producto WHERE id = ?";
+		Connection conn = GestionConexion.obtenerConexion();
+		if (conn == null) {
+			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+		}
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, id);
+
+			int filasAfectadas = stmt.executeUpdate();
+			if (filasAfectadas == 0) {
+				throw new SQLException("No se encontró el producto para eliminar.");
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al eliminar el producto: " + e.getMessage());
+			throw e;
+		}
 	}
 
 	/**

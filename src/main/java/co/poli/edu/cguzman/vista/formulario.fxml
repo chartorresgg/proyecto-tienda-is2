@@ -6,11 +6,17 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.poli.edu.cguzman.controlador.ControladorFormulario">
    <children>
-      <TextField fx:id="txt_id" layoutX="137.0" layoutY="75.0" promptText="Ingrese el ID del cliente" text="id" />
-      <TextField fx:id="txt_nombres" layoutX="137.0" layoutY="145.0" promptText="Ingrese nombres y apellidos del cliente" text="nombres" />
-      <Button fx:id="btn_guardar" layoutX="402.0" layoutY="75.0" mnemonicParsing="false" onAction="#crearCliente" text="Guardar" />
-      <Button fx:id="btn_actualizar" layoutX="398.0" layoutY="145.0" mnemonicParsing="false" onAction="#actualizarCliente" text="Actualizar" />
-      <Button fx:id="btn_eliminar" layoutX="403.0" layoutY="200.0" mnemonicParsing="false" onAction="#eliminarCliente" text="Eliminar" />
-      <Button fx:id="btn_consultar" layoutX="399.0" layoutY="264.0" mnemonicParsing="false" onAction="#consultarCliente" text="Consultar" />
+      <TextField fx:id="txt_id" layoutX="62.0" layoutY="64.0" promptText="Ingrese el ID del cliente" />
+      <TextField fx:id="txt_nombres" layoutX="62.0" layoutY="118.0" promptText="Ingrese los nombres del cliente" />
+      <Button fx:id="btn_guardar" layoutX="63.0" layoutY="187.0" mnemonicParsing="false" onAction="#crearCliente" prefHeight="30.0" prefWidth="70.0" text="Guardar" />
+      <Button fx:id="btn_actualizar" layoutX="144.0" layoutY="187.0" mnemonicParsing="false" onAction="#actualizarCliente" prefHeight="30.0" prefWidth="70.0" text="Actualizar" />
+      <Button fx:id="btn_eliminar" layoutX="63.0" layoutY="223.0" mnemonicParsing="false" onAction="#eliminarCliente" prefHeight="30.0" prefWidth="70.0" text="Eliminar" />
+      <Button fx:id="btn_consultar" layoutX="144.0" layoutY="223.0" mnemonicParsing="false" onAction="#consultarCliente" prefHeight="30.0" prefWidth="70.0" text="Consultar" />
+      <TextField fx:id="txt_idproducto" layoutX="347.0" layoutY="64.0" promptText="Ingrese ID del producto" />
+      <TextField fx:id="txt_nombreproducto" layoutX="348.0" layoutY="118.0" promptText="Descripción de producto" />
+      <Button fx:id="btn_guardar2" layoutX="348.0" layoutY="187.0" mnemonicParsing="false" onAction="#crearProducto" prefHeight="30.0" prefWidth="70.0" text="Guardar" />
+      <Button fx:id="btn_actualizar2" layoutX="427.0" layoutY="187.0" mnemonicParsing="false" onAction="#actualizarProducto" prefHeight="30.0" prefWidth="70.0" text="Actualizar" />
+      <Button fx:id="btn_eliminar2" layoutX="348.0" layoutY="223.0" mnemonicParsing="false" onAction="#eliminarProducto" prefHeight="30.0" prefWidth="70.0" text="Eliminar" />
+      <Button fx:id="btn_consultar2" layoutX="427.0" layoutY="223.0" mnemonicParsing="false" onAction="#consultarProducto" prefHeight="30.0" prefWidth="70.0" text="Consultar" />
    </children>
 </AnchorPane>

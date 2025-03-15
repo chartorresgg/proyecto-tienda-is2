@@ -3,30 +3,43 @@ package co.poli.edu.cguzman.controlador;
 import java.sql.SQLException;
 
 import co.poli.edu.cguzman.modelo.Cliente;
+import co.poli.edu.cguzman.modelo.FoodProductFactory;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
 import co.poli.edu.cguzman.services.GenericDAO;
+
+import co.poli.edu.cguzman.modelo.ProductFactory;
+import co.poli.edu.cguzman.modelo.Producto;
+import co.poli.edu.cguzman.services.ProductoDAO;
+import co.poli.edu.cguzman.services.ProductoImplementacionDAO;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+/**
+ * Controlador para el formulario de cliente.
+ */
 public class ControladorFormulario {
 
 	@FXML
-	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar;
+	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
+			btn_eliminar2, btn_actualizar2;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
-	private TextField txt_id, txt_nombres;
+	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	private GenericDAO<Cliente, String> clienteDAO = new ClienteImplementacionDAO();
+	private ProductoDAO productoDAO = new ProductoImplementacionDAO();
+	private ProductFactory productFactory = new FoodProductFactory(500);
 
 	@FXML
 	private void crearCliente(ActionEvent event) {
-		
-		String id = txt_id.getText(); // Obtiene 
+
+		String id = txt_id.getText(); // Obtiene
 		String nombre = txt_nombres.getText();
 
 		if (id.isEmpty() || nombre.isEmpty()) {
@@ -112,6 +125,105 @@ public class ControladorFormulario {
 			}
 		} catch (SQLException e) {
 			mostrarAlerta(Alert.AlertType.ERROR, "Error al leer el cliente", e.getMessage());
+		}
+	}
+
+	// Operaciones CRUD para Productos
+
+	@FXML
+	private void crearProducto(ActionEvent event) {
+
+		String id = txt_idproducto.getText();
+		String descripcion = txt_nombreproducto.getText();
+
+		if (id.isEmpty() || descripcion.isEmpty()) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar ID y Descripción.");
+			return;
+		}
+
+		try {
+			Producto producto = productFactory.createProducto(id, descripcion);
+			productoDAO.create(producto);
+
+			mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Registrado",
+					"Producto creado con ID: " + id + " y Nombre: " + descripcion);
+			limpiarCampos();
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al crear el producto", e.getMessage());
+		}
+	}
+
+	@FXML
+	private void actualizarProducto(ActionEvent event) {
+
+		String id = txt_idproducto.getText();
+		String descripcion = txt_nombreproducto.getText();
+
+		if (id.isEmpty() || descripcion.isEmpty()) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar ID y descripción.");
+			return;
+		}
+
+		try {
+			Producto productoExistente = productoDAO.read(id);
+			if (productoExistente == null) {
+				mostrarAlerta(Alert.AlertType.WARNING, "Error", "No se encontró un producto con ID: " + id);
+				return;
+			}
+
+			productoExistente.setDescripcion(descripcion);
+			productoDAO.update(productoExistente);
+			mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Actualizado",
+					"Producto con ID: " + id + " ahora tiene la descripción: " + descripcion);
+			limpiarCampos();
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al actualizar el producto", e.getMessage());
+		}
+
+	}
+
+	@FXML
+	private void eliminarProducto(ActionEvent event) {
+
+		String id = txt_idproducto.getText();
+
+		if (id.isEmpty()) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar un ID para eliminar.");
+			return;
+		}
+
+		try {
+			productoDAO.delete(id);
+			mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Eliminado",
+					"Producto con ID " + id + " eliminado correctamente.");
+			limpiarCampos();
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al eliminar el producto", e.getMessage());
+		}
+	}
+
+	@FXML
+	private void consultarProducto(ActionEvent event) {
+
+		String id = txt_idproducto.getText();
+
+		if (id.isEmpty()) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar un ID para consultar.");
+			return;
+		}
+
+		try {
+			Producto producto = productoDAO.read(id);
+			if (producto != null) {
+				txt_nombreproducto.setText(producto.getDescripcion());
+				mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Encontrado",
+						"ID: " + producto.getId() + ", Descripción: " + producto.getDescripcion());
+			} else {
+				mostrarAlerta(Alert.AlertType.WARNING, "Consulta Fallida",
+						"No se encontró un producto con el ID: " + id);
+			}
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al leer el producto", e.getMessage());
 		}
 	}
 
