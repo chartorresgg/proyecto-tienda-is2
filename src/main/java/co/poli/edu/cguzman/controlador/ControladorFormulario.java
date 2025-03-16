@@ -3,12 +3,15 @@ package co.poli.edu.cguzman.controlador;
 import java.sql.SQLException;
 
 import co.poli.edu.cguzman.modelo.Cliente;
+import co.poli.edu.cguzman.modelo.ElectricProductFactory;
 import co.poli.edu.cguzman.modelo.FoodProductFactory;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
 import co.poli.edu.cguzman.services.GenericDAO;
 
 import co.poli.edu.cguzman.modelo.ProductFactory;
 import co.poli.edu.cguzman.modelo.Producto;
+import co.poli.edu.cguzman.modelo.ProductoAlimento;
+import co.poli.edu.cguzman.modelo.ProductoElectrico;
 import co.poli.edu.cguzman.services.ProductoDAO;
 import co.poli.edu.cguzman.services.ProductoImplementacionDAO;
 
@@ -16,7 +19,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 /**
  * Controlador para el formulario de cliente.
@@ -24,12 +30,22 @@ import javafx.scene.control.TextField;
 public class ControladorFormulario {
 
 	@FXML
+	private Label lbl_idcliente, lbl_nombrecliente, lbl_idproducto, lbl_tipoproducto, lbl_descripcionproducto,
+			lbl_calvol;
+
+	@FXML
+	private ComboBox<String> comboTipoProducto;
+
+	@FXML
+	private VBox vboxAlimento, vboxElectrico;
+
+	@FXML
 	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
 			btn_eliminar2, btn_actualizar2;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
-	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto;
+	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto, txtCalorias, txtVoltaje;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	private GenericDAO<Cliente, String> clienteDAO = new ClienteImplementacionDAO();
@@ -37,9 +53,37 @@ public class ControladorFormulario {
 	private ProductFactory productFactory = new FoodProductFactory(500);
 
 	@FXML
-	private void crearCliente(ActionEvent event) {
+	private void initialize() {
+		// Agregar opciones al ComboBox
+		comboTipoProducto.getItems().addAll("Alimento", "Electrico");
 
-		String id = txt_id.getText(); // Obtiene
+		// Ocultar los VBox al inicio
+		txt_idproducto.setVisible(true);
+		txt_nombreproducto.setVisible(true);
+		vboxAlimento.setVisible(false);
+		vboxElectrico.setVisible(false);
+
+		// Configurar evento para mostrar/ocultar campos según el tipo de producto
+		// seleccionado
+		comboTipoProducto.setOnAction(event -> actualizarCampos());
+	}
+
+	@FXML
+	private void actualizarCampos() {
+		String tipo = comboTipoProducto.getValue();
+
+		if ("Alimento".equals(tipo)) {
+			vboxAlimento.setVisible(true);
+			vboxElectrico.setVisible(false);
+		} else if ("Electrico".equals(tipo)) {
+			vboxAlimento.setVisible(false);
+			vboxElectrico.setVisible(true);
+		}
+	}
+
+	@FXML
+	private void crearCliente(ActionEvent event) {
+		String id = txt_id.getText();
 		String nombre = txt_nombres.getText();
 
 		if (id.isEmpty() || nombre.isEmpty()) {
@@ -47,8 +91,14 @@ public class ControladorFormulario {
 			return;
 		}
 
-		Cliente cliente = new Cliente(id, nombre);
 		try {
+			Cliente clienteExistente = clienteDAO.read(id); // Verifica si el cliente ya existe
+			if (clienteExistente != null) {
+				mostrarAlerta(Alert.AlertType.WARNING, "Error", "El cliente con ID " + id + " ya existe.");
+				return;
+			}
+
+			Cliente cliente = new Cliente(id, nombre);
 			clienteDAO.create(cliente);
 			mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Registrado",
 					"Cliente creado con ID: " + id + " y Nombre: " + nombre);
@@ -95,6 +145,12 @@ public class ControladorFormulario {
 		}
 
 		try {
+			Cliente clienteExistente = clienteDAO.read(id); // Verifica si existe el cliente
+			if (clienteExistente == null) {
+				mostrarAlerta(Alert.AlertType.WARNING, "Error", "No se encontró un cliente con ID: " + id);
+				return;
+			}
+
 			clienteDAO.delete(id);
 			mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente Eliminado",
 					"Cliente con ID " + id + " eliminado correctamente.");
@@ -135,19 +191,45 @@ public class ControladorFormulario {
 
 		String id = txt_idproducto.getText();
 		String descripcion = txt_nombreproducto.getText();
+		String tipoProducto = comboTipoProducto.getValue();
 
-		if (id.isEmpty() || descripcion.isEmpty()) {
-			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar ID y Descripción.");
+		if (id.isEmpty() || descripcion.isEmpty() || tipoProducto == null) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar ID, descripción y seleccionar un tipo.");
 			return;
 		}
 
-		try {
-			Producto producto = productFactory.createProducto(id, descripcion);
-			productoDAO.create(producto);
+		Producto producto = null;
 
-			mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Registrado",
-					"Producto creado con ID: " + id + " y Nombre: " + descripcion);
-			limpiarCampos();
+		try {
+			if ("Alimento".equals(tipoProducto)) {
+				String caloriasStr = txtCalorias.getText();
+				if (caloriasStr.isEmpty()) {
+					mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar las calorías del producto.");
+					return;
+				}
+				int calorias = Integer.parseInt(caloriasStr);
+				ProductFactory factory = new FoodProductFactory(calorias);
+				producto = factory.createProducto(id, descripcion);
+			} else if ("Electrico".equals(tipoProducto)) {
+				String voltajeStr = txtVoltaje.getText();
+				if (voltajeStr.isEmpty()) {
+					mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar el voltaje del producto.");
+					return;
+				}
+				int voltaje = Integer.parseInt(voltajeStr);
+				ProductFactory factory = new ElectricProductFactory(voltaje);
+				producto = factory.createProducto(id, descripcion);
+			}
+
+			if (producto != null) {
+				productoDAO.create(producto);
+				mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Registrado",
+						"Producto creado con ID: " + id + " y Nombre: " + descripcion);
+				limpiarCampos();
+			}
+		} catch (NumberFormatException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error de Formato",
+					"Ingrese valores numéricos válidos en calorías o voltaje.");
 		} catch (SQLException e) {
 			mostrarAlerta(Alert.AlertType.ERROR, "Error al crear el producto", e.getMessage());
 		}
@@ -155,31 +237,63 @@ public class ControladorFormulario {
 
 	@FXML
 	private void actualizarProducto(ActionEvent event) {
-
 		String id = txt_idproducto.getText();
 		String descripcion = txt_nombreproducto.getText();
+		String tipoProducto = comboTipoProducto.getValue();
 
-		if (id.isEmpty() || descripcion.isEmpty()) {
-			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar ID y descripción.");
+		// Validaciones iniciales
+		if (id.isEmpty() || descripcion.isEmpty() || tipoProducto == null) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error",
+					"Debe ingresar ID, descripción y seleccionar un tipo de producto.");
 			return;
 		}
 
 		try {
+			// Verificar si el producto existe en la base de datos
 			Producto productoExistente = productoDAO.read(id);
 			if (productoExistente == null) {
 				mostrarAlerta(Alert.AlertType.WARNING, "Error", "No se encontró un producto con ID: " + id);
 				return;
 			}
 
-			productoExistente.setDescripcion(descripcion);
-			productoDAO.update(productoExistente);
+			Producto productoActualizado = null;
+
+			// Crear una nueva instancia según el tipo seleccionado
+			if (tipoProducto.equals("Alimento")) {
+				String caloriasStr = txtCalorias.getText();
+				if (caloriasStr.isEmpty()) {
+					mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar las calorías del producto.");
+					return;
+				}
+				int calorias = Integer.parseInt(caloriasStr);
+				productoActualizado = new ProductoAlimento(id, descripcion, calorias);
+			} else if (tipoProducto.equals("Electrico")) {
+				String voltajeStr = txtVoltaje.getText();
+				if (voltajeStr.isEmpty()) {
+					mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar el voltaje del producto.");
+					return;
+				}
+				int voltaje = Integer.parseInt(voltajeStr);
+				productoActualizado = new ProductoElectrico(id, descripcion, voltaje);
+			}
+
+			// Verificar que el producto actualizado no sea nulo
+			if (productoActualizado == null) {
+				mostrarAlerta(Alert.AlertType.ERROR, "Error", "El tipo de producto no es válido.");
+				return;
+			}
+
+			// Llamar al DAO para actualizar en la base de datos
+			productoDAO.update(productoActualizado);
 			mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Actualizado",
-					"Producto con ID: " + id + " ahora tiene la descripción: " + descripcion);
+					"Producto con ID: " + id + " ha sido actualizado correctamente.");
 			limpiarCampos();
+		} catch (NumberFormatException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error de Formato",
+					"Ingrese valores numéricos válidos en calorías o voltaje.");
 		} catch (SQLException e) {
 			mostrarAlerta(Alert.AlertType.ERROR, "Error al actualizar el producto", e.getMessage());
 		}
-
 	}
 
 	@FXML
