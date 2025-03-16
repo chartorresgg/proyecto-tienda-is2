@@ -23,7 +23,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws IOException {
 
-		AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/co/poli/edu/cguzman/vista/formulario.fxml"));
+		AnchorPane root = (AnchorPane) FXMLLoader
+				.load(getClass().getResource("/co/poli/edu/cguzman/vista/formulario.fxml"));
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.setTitle("Formulario de Cliente");

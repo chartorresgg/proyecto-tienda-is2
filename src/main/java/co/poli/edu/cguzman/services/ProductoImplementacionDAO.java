@@ -187,8 +187,47 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String>, 
 	 */
 	@Override
 	public List<Producto> findAll() throws SQLException {
-		// Implementación pendiente
-		return null;
+		List<Producto> productos = new ArrayList<>();
+		String sql = "SELECT id, descripcion, tipo, calorias, voltaje FROM Producto";
+
+		Connection conn = GestionConexion.obtenerConexion();
+		if (conn == null) {
+			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+		}
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+			while (rs.next()) {
+				String id = rs.getString("id");
+				String descripcion = rs.getString("descripcion");
+				String tipo = rs.getString("tipo");
+
+				if ("Alimento".equals(tipo)) {
+					int calorias = rs.getInt("calorias");
+					productos.add(new ProductoAlimento(id, descripcion, calorias));
+				} else if ("Electrico".equals(tipo)) {
+					double voltaje = rs.getDouble("voltaje");
+					productos.add(new ProductoElectrico(id, descripcion, voltaje));
+				} else {
+					productos.add(new Producto(id, descripcion) {
+						@Override
+						public String obtenerTipo() {
+							return "Desconocido";
+						}
+
+						@Override
+						public Producto clone() {
+							return this;
+						}
+					});
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al obtener la lista de productos: " + e.getMessage());
+			throw e;
+		}
+
+		return productos;
 	}
 
 	/**
@@ -230,5 +269,52 @@ public class ProductoImplementacionDAO implements GenericDAO<Producto, String>, 
 			throw e;
 		}
 		return productos;
+	}
+
+	/**
+	 * Obtiene el último ID registrado en la base de datos.
+	 *
+	 * @return El último ID como entero, o 0 si no hay productos.
+	 * @throws SQLException Si ocurre un error en la base de datos.
+	 */
+//	public int obtenerUltimoId() throws SQLException {
+//		String sql = "SELECT MAX(CAST(id AS UNSIGNED)) AS max_id FROM Producto";
+//		Connection conn = GestionConexion.obtenerConexion();
+//
+//		if (conn == null) {
+//			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+//		}
+//
+//		try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+//
+//			if (rs.next()) {
+//				return rs.getInt("max_id"); // Devuelve el ID más alto registrado
+//			}
+//			return 0; // Retorna 0 si la tabla está vacía
+//		} catch (SQLException e) {
+//			System.err.println("Error al obtener el último ID: " + e.getMessage());
+//			throw e;
+//		}
+//	}
+
+	@Override
+	public int obtenerUltimoID() throws Exception {
+		String sql = "SELECT MAX(CAST(id AS UNSIGNED)) AS max_id FROM Producto";
+		Connection conn = GestionConexion.obtenerConexion();
+
+		if (conn == null) {
+			throw new SQLException("No se pudo obtener conexión a la base de datos.");
+		}
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+			if (rs.next()) {
+				return rs.getInt("max_id"); // Devuelve el ID más alto registrado
+			}
+			return 0; // Retorna 0 si la tabla está vacía
+		} catch (SQLException e) {
+			System.err.println("Error al obtener el último ID: " + e.getMessage());
+			throw e;
+		}
 	}
 }

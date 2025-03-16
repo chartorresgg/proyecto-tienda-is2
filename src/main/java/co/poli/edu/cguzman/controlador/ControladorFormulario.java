@@ -41,7 +41,7 @@ public class ControladorFormulario {
 
 	@FXML
 	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
-			btn_eliminar2, btn_actualizar2;
+			btn_eliminar2, btn_actualizar2, btn_clonarProducto;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
@@ -105,6 +105,47 @@ public class ControladorFormulario {
 			limpiarCampos();
 		} catch (SQLException e) {
 			mostrarAlerta(Alert.AlertType.ERROR, "Error al crear el cliente", e.getMessage());
+		}
+	}
+
+	@FXML
+	public void clonarProducto() throws Exception {
+		String idOriginal = txt_idproducto.getText();
+
+		if (idOriginal.isEmpty()) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debe ingresar el ID del producto a clonar.");
+			return;
+		}
+
+		try {
+			// Buscar el producto original
+			Producto productoOriginal = productoDAO.read(idOriginal);
+			if (productoOriginal == null) {
+				mostrarAlerta(Alert.AlertType.WARNING, "Error", "No se encontró un producto con ID: " + idOriginal);
+				return;
+			}
+
+			// Obtener el último ID de la base de datos y calcular el nuevo ID
+			int nuevoId = productoDAO.obtenerUltimoID() + 1;
+
+			// Clonar el producto usando el método clone()
+			Producto productoClonado = productoOriginal.clone();
+			if (productoClonado == null) {
+				mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo clonar el producto.");
+				return;
+			}
+
+			productoClonado.setId(String.valueOf(nuevoId)); // Asignar el nuevo ID
+
+			// Guardar el producto clonado en la base de datos
+			productoDAO.create(productoClonado);
+
+			mostrarAlerta(Alert.AlertType.INFORMATION, "Producto Clonado",
+					"El producto fue clonado con éxito. Nuevo ID: " + nuevoId);
+		} catch (SQLException e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error al clonar el producto", e.getMessage());
+		} catch (Exception e) {
+			mostrarAlerta(Alert.AlertType.ERROR, "Error inesperado", e.getMessage());
 		}
 	}
 
