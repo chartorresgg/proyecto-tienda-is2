@@ -1,7 +1,7 @@
 module co.poli.edu.cguzman {
 	requires javafx.controls;
 	requires javafx.fxml;
-	requires javafx.graphics;
+	requires transitive javafx.graphics;
 	requires java.sql;
 
 	opens co.poli.edu.cguzman.vista to javafx.fxml;

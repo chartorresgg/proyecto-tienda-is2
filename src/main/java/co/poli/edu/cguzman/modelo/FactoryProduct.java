@@ -4,7 +4,7 @@ package co.poli.edu.cguzman.modelo;
  * Interfaz Factory para la creación de productos. Define un método abstracto
  * para la creación de ProductoS.
  */
-public interface ProductFactory {
+public interface FactoryProduct {
 
 	/**
 	 * Método abstracto para la creación de un Producto.

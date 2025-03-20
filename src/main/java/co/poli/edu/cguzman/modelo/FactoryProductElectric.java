@@ -5,7 +5,7 @@ package co.poli.edu.cguzman.modelo;
  * Implementa la interfaz ProductFactory y se encarga de instanciar objetos de
  * tipo ProductoElectrico.
  */
-public class ElectricProductFactory implements ProductFactory {
+public class FactoryProductElectric implements FactoryProduct {
 
 	// Atributo que almacena el voltaje de entrada del producto eléctrico.
 	private double voltajeEntrada;
@@ -16,7 +16,7 @@ public class ElectricProductFactory implements ProductFactory {
 	 * @param voltajeEntrada Voltaje requerido para el funcionamiento del producto
 	 *                       eléctrico.
 	 */
-	public ElectricProductFactory(double voltajeEntrada) {
+	public FactoryProductElectric(double voltajeEntrada) {
 		this.voltajeEntrada = voltajeEntrada;
 	}
 

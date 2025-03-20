@@ -5,7 +5,7 @@ package co.poli.edu.cguzman.modelo;
  * Implementa la interfaz ProductFactory y se encarga de instanciar objetos de
  * tipo ProductoAlimento.
  */
-public class FoodProductFactory implements ProductFactory {
+public class FactoryProductFood implements FactoryProduct {
 
 	// Atributo que almacena la cantidad de calorías del producto alimenticio.
 	private int calorias;
@@ -15,7 +15,7 @@ public class FoodProductFactory implements ProductFactory {
 	 * 
 	 * @param calorias Cantidad de calorías que tendrá el producto creado.
 	 */
-	public FoodProductFactory(int calorias) {
+	public FactoryProductFood(int calorias) {
 		this.calorias = calorias;
 	}
 

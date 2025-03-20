@@ -2,13 +2,15 @@ package co.poli.edu.cguzman.controlador;
 
 import java.sql.SQLException;
 
+import co.poli.edu.cguzman.composite.Departamento;
+import co.poli.edu.cguzman.composite.Empleado;
 import co.poli.edu.cguzman.modelo.Cliente;
-import co.poli.edu.cguzman.modelo.ElectricProductFactory;
-import co.poli.edu.cguzman.modelo.FoodProductFactory;
+import co.poli.edu.cguzman.modelo.FactoryProductElectric;
+import co.poli.edu.cguzman.modelo.FactoryProductFood;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
 import co.poli.edu.cguzman.services.GenericDAO;
 
-import co.poli.edu.cguzman.modelo.ProductFactory;
+import co.poli.edu.cguzman.modelo.FactoryProduct;
 import co.poli.edu.cguzman.modelo.Producto;
 import co.poli.edu.cguzman.modelo.ProductoAlimento;
 import co.poli.edu.cguzman.modelo.ProductoElectrico;
@@ -21,13 +23,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 /**
- * Controlador para el formulario de cliente.
+ * Controlador para el formulario de cliente y productos.
  */
 public class ControladorFormulario {
+
+	@FXML
+	private TextArea txtarea_composite;
 
 	@FXML
 	private Label lbl_idcliente, lbl_nombrecliente, lbl_idproducto, lbl_tipoproducto, lbl_descripcionproducto,
@@ -41,7 +47,7 @@ public class ControladorFormulario {
 
 	@FXML
 	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
-			btn_eliminar2, btn_actualizar2, btn_clonarProducto;
+			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
@@ -50,14 +56,16 @@ public class ControladorFormulario {
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	private GenericDAO<Cliente, String> clienteDAO = new ClienteImplementacionDAO();
 	private ProductoDAO productoDAO = new ProductoImplementacionDAO();
-	private ProductFactory productFactory = new FoodProductFactory(500);
+//	private ProductFactory productFactory = new FoodProductFactory(500);
 
+	/**
+	 * Método que inicializa la interfaz de usuario con los componentes necesarios.
+	 */
 	@FXML
 	private void initialize() {
-		// Agregar opciones al ComboBox
-		comboTipoProducto.getItems().addAll("Alimento", "Electrico");
 
-		// Ocultar los VBox al inicio
+		comboTipoProducto.getItems().addAll("Alimento", "Electrico"); // Agregar opciones al ComboBox
+
 		txt_idproducto.setVisible(true);
 		txt_nombreproducto.setVisible(true);
 		vboxAlimento.setVisible(false);
@@ -67,6 +75,10 @@ public class ControladorFormulario {
 		// seleccionado
 		comboTipoProducto.setOnAction(event -> actualizarCampos());
 	}
+
+	/**
+	 * Método que se ejecuta al cargar el formulario.
+	 */
 
 	@FXML
 	private void actualizarCampos() {
@@ -249,7 +261,7 @@ public class ControladorFormulario {
 					return;
 				}
 				int calorias = Integer.parseInt(caloriasStr);
-				ProductFactory factory = new FoodProductFactory(calorias);
+				FactoryProduct factory = new FactoryProductFood(calorias);
 				producto = factory.createProducto(id, descripcion);
 			} else if ("Electrico".equals(tipoProducto)) {
 				String voltajeStr = txtVoltaje.getText();
@@ -258,7 +270,7 @@ public class ControladorFormulario {
 					return;
 				}
 				int voltaje = Integer.parseInt(voltajeStr);
-				ProductFactory factory = new ElectricProductFactory(voltaje);
+				FactoryProduct factory = new FactoryProductElectric(voltaje);
 				producto = factory.createProducto(id, descripcion);
 			}
 
@@ -380,6 +392,32 @@ public class ControladorFormulario {
 		} catch (SQLException e) {
 			mostrarAlerta(Alert.AlertType.ERROR, "Error al leer el producto", e.getMessage());
 		}
+	}
+
+	@FXML
+	private void inicializarEstructura() {
+
+		// Crear empleados
+		Empleado emp1 = new Empleado("Dana Yuredt", "Hacker no ético");
+		Empleado emp2 = new Empleado("María López", "Ingeniero de Computación Cuántica");
+
+		// Crear departamentos
+		Departamento departamentoTI = new Departamento("Tecnología de Microsoft", null);
+		departamentoTI.agregarUnidad(emp1);
+		departamentoTI.agregarUnidad(emp2);
+
+		// Crear subdepartamento
+		Departamento subdepartamentoIA = new Departamento("Inteligencia Artificial", null);
+		subdepartamentoIA.agregarUnidad(new Empleado("Pepito Pérez", "Investigador IA"));
+
+		// Agregar subdepartamento al departamento principal
+		departamentoTI.agregarUnidad(subdepartamentoIA);
+
+		// Mostrar en el TextArea
+		StringBuilder builder = new StringBuilder();
+		departamentoTI.mostrarInfo(builder);
+		txtarea_composite.setText(builder.toString());
+
 	}
 
 	private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
