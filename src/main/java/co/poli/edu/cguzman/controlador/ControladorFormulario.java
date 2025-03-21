@@ -2,8 +2,9 @@ package co.poli.edu.cguzman.controlador;
 
 import java.sql.SQLException;
 
-import co.poli.edu.cguzman.composite.Departamento;
-import co.poli.edu.cguzman.composite.Empleado;
+
+import co.poli.edu.PatronComposite.Departamento;
+import co.poli.edu.PatronComposite.Empleado;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
@@ -402,12 +403,12 @@ public class ControladorFormulario {
 		Empleado emp2 = new Empleado("María López", "Ingeniero de Computación Cuántica");
 
 		// Crear departamentos
-		Departamento departamentoTI = new Departamento("Tecnología de Microsoft", null);
+		Departamento departamentoTI = new Departamento("Tecnología de Microsoft");
 		departamentoTI.agregarUnidad(emp1);
 		departamentoTI.agregarUnidad(emp2);
 
 		// Crear subdepartamento
-		Departamento subdepartamentoIA = new Departamento("Inteligencia Artificial", null);
+		Departamento subdepartamentoIA = new Departamento("Inteligencia Artificial");
 		subdepartamentoIA.agregarUnidad(new Empleado("Pepito Pérez", "Investigador IA"));
 
 		// Agregar subdepartamento al departamento principal

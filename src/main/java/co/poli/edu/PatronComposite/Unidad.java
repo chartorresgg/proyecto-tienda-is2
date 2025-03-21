@@ -1,10 +1,7 @@
-package co.poli.edu.cguzman.composite;
+package co.poli.edu.PatronComposite;
 
-/**
- * 
- */
 public interface Unidad {
-	
     void mostrarInfo(StringBuilder builder);
-
 }
+
+
