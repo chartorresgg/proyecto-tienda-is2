@@ -2,11 +2,17 @@ package co.poli.edu.cguzman.controlador;
 
 import java.sql.SQLException;
 
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import co.poli.edu.cguzman.composite.Departamento;
 import co.poli.edu.cguzman.composite.Empleado;
+import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
+import co.poli.edu.cguzman.modelo.Evaluacion;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
+import co.poli.edu.cguzman.modelo.PoliticaEntrega;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
 import co.poli.edu.cguzman.services.GenericDAO;
 
@@ -14,9 +20,11 @@ import co.poli.edu.cguzman.modelo.FactoryProduct;
 import co.poli.edu.cguzman.modelo.Producto;
 import co.poli.edu.cguzman.modelo.ProductoAlimento;
 import co.poli.edu.cguzman.modelo.ProductoElectrico;
+import co.poli.edu.cguzman.modelo.Proveedor;
 import co.poli.edu.cguzman.services.ProductoDAO;
 import co.poli.edu.cguzman.services.ProductoImplementacionDAO;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -31,6 +39,29 @@ import javafx.scene.layout.VBox;
  * Controlador para el formulario de cliente y productos.
  */
 public class ControladorFormulario {
+
+	@FXML
+	private TableView<Proveedor> tabla_Proveedores;
+
+	@FXML
+	private TableColumn<Proveedor, String> colNIT;
+
+	@FXML
+	private TableColumn<Proveedor, String> colNombre;
+
+	@FXML
+	private TableColumn<Proveedor, String> colDireccion;
+
+	@FXML
+	private TableColumn<Proveedor, String> colCertificacion;
+
+	@FXML
+	private TableColumn<Proveedor, String> colEvaluacion;
+
+	@FXML
+	private TableColumn<Proveedor, String> colPoliticaEntrega;
+
+	private ObservableList<Proveedor> listaProveedores = FXCollections.observableArrayList();
 
 	@FXML
 	private TextArea txtarea_composite;
@@ -74,6 +105,16 @@ public class ControladorFormulario {
 		// Configurar evento para mostrar/ocultar campos según el tipo de producto
 		// seleccionado
 		comboTipoProducto.setOnAction(event -> actualizarCampos());
+
+		colNIT.setCellValueFactory(new PropertyValueFactory<>("nit"));
+		colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+		colCertificacion.setCellValueFactory(new PropertyValueFactory<>("certificacion"));
+		colEvaluacion.setCellValueFactory(new PropertyValueFactory<>("evaluacion"));
+		colPoliticaEntrega.setCellValueFactory(new PropertyValueFactory<>("politicaEntrega"));
+
+		// Agregar datos de ejemplo
+		tabla_Proveedores.setItems(listaProveedores);
 	}
 
 	/**
@@ -418,6 +459,19 @@ public class ControladorFormulario {
 		departamentoTI.mostrarInfo(builder);
 		txtarea_composite.setText(builder.toString());
 
+	}
+
+	@FXML
+	private void agregarProveedor() {
+		Certificacion certificacion = new Certificacion("ISO 9001", "Bureau Veritas", "CERT123");
+		Evaluacion evaluacion = new Evaluacion("Alta", 4.5, "Cumple con estándares de calidad");
+		PoliticaEntrega politica = new PoliticaEntrega("5 días", "Aéreo", "$10");
+
+		Proveedor proveedor = new Proveedor.Builder().nit("900123456-7").nombre("Proveedor S.A.")
+				.direccion("Calle 170 # 13-40, Bogotá D.C.").certificacion(certificacion).evaluacion(evaluacion)
+				.politicaEntrega(politica).build();
+
+		listaProveedores.add(proveedor);
 	}
 
 	private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {

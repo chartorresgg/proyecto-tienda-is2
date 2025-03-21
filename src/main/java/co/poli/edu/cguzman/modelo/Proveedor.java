@@ -1,10 +1,17 @@
 package co.poli.edu.cguzman.modelo;
 
+/**
+ * Clase Proveedor.
+ * 
+ * Esta clase contiene los atributos y métodos de un proveedor.
+ * 
+ * @version 1.0
+ */
 public class Proveedor {
 
 	private String nit;
 	private String nombre;
-	private String dirección;
+	private String direccion;
 	private Evaluacion evaluacion;
 	private Certificacion certificacion;
 	private PoliticaEntrega politicaEntrega;
@@ -16,27 +23,30 @@ public class Proveedor {
 	 * @param nombre          Nombre del proveedor.
 	 * @param dirección       Dirección del proveedor.
 	 * @param evaluacion      Evaluación del proveedor.
-	 * @param certificacion   Certificación del proveedor.
+	 * @param certificacion   S Certificación del proveedor.
 	 * @param politicaEntrega Política de entrega del proveedor.
 	 */
 	private Proveedor(Builder builder) {
+
 		this.nit = builder.nit;
 		this.nombre = builder.nombre;
-		this.dirección = builder.dirección;
+		this.direccion = builder.direccion;
 		this.evaluacion = builder.evaluacion;
 		this.certificacion = builder.certificacion;
 		this.politicaEntrega = builder.politicaEntrega;
 	}
 
+	
 	/**
 	 * Método para obtener el NIT del proveedor.
 	 * 
 	 * @return NIT del proveedor.
 	 */
 	public static class Builder {
+
 		private String nit;
 		private String nombre;
-		private String dirección;
+		private String direccion;
 		private Evaluacion evaluacion;
 		private Certificacion certificacion;
 		private PoliticaEntrega politicaEntrega;
@@ -51,8 +61,8 @@ public class Proveedor {
 			return this;
 		}
 
-		public Builder dirección(String dirección) {
-			this.dirección = dirección;
+		public Builder direccion(String direccion) {
+			this.direccion = direccion;
 			return this;
 		}
 
@@ -76,9 +86,36 @@ public class Proveedor {
 		}
 	}
 
+	// Getters
+	public String getNit() {
+		return nit;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+	
+	
+	public Evaluacion getEvaluacion() {
+		return evaluacion;
+	}
+
+	public Certificacion getCertificacion() {
+		return certificacion;
+	}
+
+	public PoliticaEntrega getPoliticaEntrega() {
+		return politicaEntrega;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Proveedor [nit=" + nit + ", nombre=" + nombre + ", dirección=" + dirección + ", evaluacion="
+		return "Proveedor [nit=" + nit + ", nombre=" + nombre + ", direccion=" + direccion + ", evaluacion="
 				+ evaluacion + ", certificacion=" + certificacion + ", politicaEntrega=" + politicaEntrega + "]";
 	}
 }
