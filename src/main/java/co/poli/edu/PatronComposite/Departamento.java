@@ -7,7 +7,7 @@ public class Departamento implements Unidad {
     private String nombre;
     private List<Unidad> unidades; 
 
-    // Constructor corregido sin el parámetro List<Unidad>
+    // Constructor
     public Departamento(String nombre) {
         this.nombre = nombre;
         this.unidades = new ArrayList<>(); // Se inicializa la lista correctamente
