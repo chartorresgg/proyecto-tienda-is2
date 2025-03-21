@@ -16,7 +16,7 @@ public class Certificacion {
 	/**
 	 * Constructor de la clase Certificacion.
 	 * 
-	 * @param tipoCertificacion    Tipo de certificación.
+	 * @param tipoCertificacion    Tip	o de certificación.
 	 * @param entidadCertificadora Entidad certificadora.
 	 * @param idCertificacion      Identificador de la certificación.
 	 */
