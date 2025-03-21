@@ -468,8 +468,11 @@ public class ControladorFormulario {
 		PoliticaEntrega politica = new PoliticaEntrega("5 días", "Aéreo", "$10");
 
 		Proveedor proveedor = new Proveedor.Builder().nit("900123456-7").nombre("Proveedor S.A.")
-				.direccion("Calle 170 # 13-40, Bogotá D.C.").certificacion(certificacion).evaluacion(evaluacion)
-				.politicaEntrega(politica).build();
+				.direccion("Calle 170 # 13-40, Bogotá D.C.").
+				certificacion(certificacion).
+				evaluacion(evaluacion)
+				.politicaEntrega(politica).
+				build();
 
 		listaProveedores.add(proveedor);
 	}
