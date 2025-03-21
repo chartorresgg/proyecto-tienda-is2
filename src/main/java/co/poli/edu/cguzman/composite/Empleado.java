@@ -20,7 +20,7 @@ public class Empleado implements Unidad {
 	 * Método para mostrar la información del empleado.
 	 */
 	@Override
-	public void mostrarInfo(StringBuilder builder) {
+	public void mostrarInformación(StringBuilder builder) {
 		builder.append("Empleado: ").append(nombre).append(", Cargo: ").append(cargo).append("\n");
 	}
 

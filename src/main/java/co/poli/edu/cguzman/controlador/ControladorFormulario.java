@@ -4,9 +4,12 @@ import java.sql.SQLException;
 
 import co.poli.edu.cguzman.composite.Departamento;
 import co.poli.edu.cguzman.composite.Empleado;
+import co.poli.edu.cguzman.modelo.AdapterNequi;
+import co.poli.edu.cguzman.modelo.AdapterPayPal;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
+import co.poli.edu.cguzman.modelo.IPago;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
 import co.poli.edu.cguzman.services.GenericDAO;
 
@@ -47,22 +50,28 @@ public class ControladorFormulario {
 
 	@FXML
 	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
-			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar;
+			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar, btn_nequi, btn_PayPal;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
-	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto, txtCalorias, txtVoltaje;
+	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto, txtCalorias, txtVoltaje, txt_Monto;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	private GenericDAO<Cliente, String> clienteDAO = new ClienteImplementacionDAO();
 	private ProductoDAO productoDAO = new ProductoImplementacionDAO();
 //	private ProductFactory productFactory = new FoodProductFactory(500);
 
+	private IPago nequiAdapter;
+	private IPago payPlAdapter;
+
 	/**
 	 * Método que inicializa la interfaz de usuario con los componentes necesarios.
 	 */
 	@FXML
 	private void initialize() {
+
+		nequiAdapter = new AdapterNequi(null);
+		payPlAdapter = new AdapterPayPal(null);
 
 		comboTipoProducto.getItems().addAll("Alimento", "Electrico"); // Agregar opciones al ComboBox
 
@@ -399,15 +408,15 @@ public class ControladorFormulario {
 
 		// Crear empleados
 		Empleado emp1 = new Empleado("Dana Yuredt", "Hacker no ético");
-		Empleado emp2 = new Empleado("María López", "Ingeniero de Computación Cuántica");
+		Empleado emp2 = new Empleado("Carlos Guzmán Torres", "Ingeniero de Computación Cuántica");
 
 		// Crear departamentos
-		Departamento departamentoTI = new Departamento("Tecnología de Microsoft", null);
+		Departamento departamentoTI = new Departamento("Tecnología de Microsoft");
 		departamentoTI.agregarUnidad(emp1);
 		departamentoTI.agregarUnidad(emp2);
 
 		// Crear subdepartamento
-		Departamento subdepartamentoIA = new Departamento("Inteligencia Artificial", null);
+		Departamento subdepartamentoIA = new Departamento("Inteligencia Artificial");
 		subdepartamentoIA.agregarUnidad(new Empleado("Pepito Pérez", "Investigador IA"));
 
 		// Agregar subdepartamento al departamento principal
@@ -415,9 +424,37 @@ public class ControladorFormulario {
 
 		// Mostrar en el TextArea
 		StringBuilder builder = new StringBuilder();
-		departamentoTI.mostrarInfo(builder);
+		departamentoTI.mostrarInformación(builder);
 		txtarea_composite.setText(builder.toString());
 
+	}
+
+	@FXML
+	public void pagarConNequi() {
+		double monto = obtenerMonto();
+		if (monto > 0) {
+			nequiAdapter.hacerPago(monto);
+		} else {
+			System.out.println("Ingrese un monto válido.");
+		}
+	}
+
+	@FXML
+	public void pagarConPayPal() {
+		double monto = obtenerMonto();
+		if (monto > 0) {
+			payPlAdapter.hacerPago(monto);
+		} else {
+			System.out.println("Ingrese un monto válido.");
+		}
+	}
+
+	private double obtenerMonto() {
+		try {
+			return Double.parseDouble(txt_Monto.getText());
+		} catch (NumberFormatException e) {
+			return 0;
+		}
 	}
 
 	private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {

@@ -6,7 +6,7 @@ import java.util.List;
 public class Departamento implements Unidad {
 
 	private String nombre;
-	private List<Unidad> unidades = new ArrayList<>(); // Listado de unidades del departamento.
+	private List<Unidad> unidades; // Listado de unidades del departamento.
 
 	/**
 	 * Constructor de la clase Departamento.
@@ -14,8 +14,9 @@ public class Departamento implements Unidad {
 	 * @param nombre   Nombre del departamento.
 	 * @param unidades Unidades del departamento.
 	 */
-	public Departamento(String nombre, Unidad[] unidades) {
+	public Departamento(String nombre) {
 		this.nombre = nombre;
+		this.unidades = new ArrayList<>();
 	}
 
 	/**
@@ -27,14 +28,18 @@ public class Departamento implements Unidad {
 		unidades.add(unidad);
 	}
 
+	public List<Unidad> getUnidades() {
+		return new ArrayList<>(unidades); // Evita modificación externa
+	}
+
 	/**
 	 * Método para mostrar la información del departamento.
 	 */
 	@Override
-	public void mostrarInfo(StringBuilder builder) {
+	public void mostrarInformación(StringBuilder builder) {
 		builder.append("Departamento: ").append(nombre).append("\n");
 		for (Unidad unidad : unidades) {
-			unidad.mostrarInfo(builder);
+			unidad.mostrarInformación(builder);
 		}
 	}
 
