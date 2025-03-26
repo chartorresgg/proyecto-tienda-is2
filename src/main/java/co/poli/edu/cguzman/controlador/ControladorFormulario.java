@@ -2,10 +2,9 @@ package co.poli.edu.cguzman.controlador;
 
 import java.sql.SQLException;
 
-
-import co.poli.edu.PatronComposite.Departamento;
-import co.poli.edu.PatronComposite.Empleado;
 import co.poli.edu.cguzman.modelo.Cliente;
+import co.poli.edu.cguzman.modelo.Departamento;
+import co.poli.edu.cguzman.modelo.Empleado;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
@@ -398,25 +397,44 @@ public class ControladorFormulario {
 	@FXML
 	private void inicializarEstructura() {
 
-		// Crear empleados
-		Empleado emp1 = new Empleado("Dana Yuredt", "Hacker no ético");
-		Empleado emp2 = new Empleado("María López", "Ingeniero de Computación Cuántica");
+		// Crear rector
+		Empleado rector = new Empleado("Dr. Juan Pérez", "Rector");
 
-		// Crear departamentos
-		Departamento departamentoTI = new Departamento("Tecnología de Microsoft");
-		departamentoTI.agregarUnidad(emp1);
-		departamentoTI.agregarUnidad(emp2);
+		// Crear facultades
+		Departamento facultadIngenieria = new Departamento("Facultad de Ingeniería, Diseño e Innovación");
+		Departamento facultadSociedad = new Departamento("Facultad de Sociedad, Cultura y Creatividad");
+		Departamento facultadNegocios = new Departamento("Facultad de Negocios, Gestión y Sostenibilidad");
 
-		// Crear subdepartamento
-		Departamento subdepartamentoIA = new Departamento("Inteligencia Artificial");
-		subdepartamentoIA.agregarUnidad(new Empleado("Pepito Pérez", "Investigador IA"));
+		// Crear coordinadores de facultad
+		Empleado coordIngenieria = new Empleado("Ing. María Fernández", "Coordinadora de Ingeniería");
+		Empleado coordSociedad = new Empleado("Lic. Carlos Ramírez", "Coordinador de Sociedad y Cultura");
+		Empleado coordNegocios = new Empleado("Eco. Laura Gómez", "Coordinadora de Negocios y Gestión");
 
-		// Agregar subdepartamento al departamento principal
-		departamentoTI.agregarUnidad(subdepartamentoIA);
+		// Crear profesores
+		Empleado profIngenieria = new Empleado("Dr. Luis Torres", "Profesor de Ingeniería");
+		Empleado profSociedad = new Empleado("Mtro. Andrés Morales", "Profesor de Cultura y Sociedad");
+		Empleado profNegocios = new Empleado("Lic. Sofía Herrera", "Profesor de Negocios y Gestión");
+
+		// Agregar empleados a cada facultad
+		facultadIngenieria.agregarUnidad(coordIngenieria);
+		facultadIngenieria.agregarUnidad(profIngenieria);
+
+		facultadSociedad.agregarUnidad(coordSociedad);
+		facultadSociedad.agregarUnidad(profSociedad);
+
+		facultadNegocios.agregarUnidad(coordNegocios);
+		facultadNegocios.agregarUnidad(profNegocios);
+
+		// Crear rectoría y agregar las facultades
+		Departamento rectoria = new Departamento("Rectoría");
+		rectoria.agregarUnidad(rector);
+		rectoria.agregarUnidad(facultadIngenieria);
+		rectoria.agregarUnidad(facultadSociedad);
+		rectoria.agregarUnidad(facultadNegocios);
 
 		// Mostrar en el TextArea
 		StringBuilder builder = new StringBuilder();
-		departamentoTI.mostrarInfo(builder);
+		rectoria.mostrarInfo(builder);
 		txtarea_composite.setText(builder.toString());
 
 	}

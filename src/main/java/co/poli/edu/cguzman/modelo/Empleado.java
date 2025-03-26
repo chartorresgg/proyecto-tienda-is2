@@ -1,4 +1,4 @@
-package co.poli.edu.PatronComposite;
+package co.poli.edu.cguzman.modelo;
 
 public class Empleado implements Unidad {
     private String nombre;
@@ -14,5 +14,3 @@ public class Empleado implements Unidad {
         builder.append("Empleado: ").append(nombre).append(" - Cargo: ").append(cargo).append("\n");
     }
 }
-
-
