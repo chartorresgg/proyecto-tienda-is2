@@ -417,6 +417,11 @@ public class ControladorFormulario {
 	}
 
 	@FXML
+	private void inicializarEstructura(ActionEvent event) {
+		System.out.println("Evento inicializarEstructura ejecutado.");
+	}
+
+	@FXML
 	private void consultarProducto(ActionEvent event) {
 
 		String id = txt_idproducto.getText();
@@ -441,7 +446,6 @@ public class ControladorFormulario {
 		}
 	}
 
-	
 	/**
 	 * 
 	 */
