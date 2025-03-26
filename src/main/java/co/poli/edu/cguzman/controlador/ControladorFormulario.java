@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import co.poli.edu.cguzman.composite.Departamento;
-import co.poli.edu.cguzman.composite.Empleado;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
@@ -438,44 +436,18 @@ public class ControladorFormulario {
 	@FXML
 	private void inicializarEstructura() {
 
-		// Crear empleados
-		Empleado emp1 = new Empleado("Dana Yuredt", "Hacker no ético");
-		Empleado emp2 = new Empleado("María López", "Ingeniero de Computación Cuántica");
-
-		// Crear departamentos
-		Departamento departamentoTI = new Departamento("Tecnología de Microsoft", null);
-		departamentoTI.agregarUnidad(emp1);
-		departamentoTI.agregarUnidad(emp2);
-
-		// Crear subdepartamento
-		Departamento subdepartamentoIA = new Departamento("Inteligencia Artificial", null);
-		subdepartamentoIA.agregarUnidad(new Empleado("Pepito Pérez", "Investigador IA"));
-
-		// Agregar subdepartamento al departamento principal
-		departamentoTI.agregarUnidad(subdepartamentoIA);
-
-		// Mostrar en el TextArea
-		StringBuilder builder = new StringBuilder();
-		departamentoTI.mostrarInfo(builder);
-		txtarea_composite.setText(builder.toString());
-
 	}
 
 	@FXML
 	private void agregarProveedor() {
-		
+
 		Certificacion certificacion = new Certificacion("ISO 9001", "Bureau Veritas", "CERT123");
 		Evaluacion evaluacion = new Evaluacion("Alta", 4.5, "Cumple con estándares de calidad");
 		PoliticaEntrega politica = new PoliticaEntrega("5 días", "Aéreo", "$10");
 
-		Proveedor proveedor = new Proveedor.Builder()
-				.nit("900123456-7")
-				.nombre("Proveedor S.A.")
-				.direccion("Calle 170 # 13-40, Bogotá D.C.")
-				.certificacion(certificacion)
-				.evaluacion(evaluacion)
-				.politicaEntrega(politica).
-				build();
+		Proveedor proveedor = new Proveedor.Builder().nit("900123456-7").nombre("Proveedor S.A.")
+				.direccion("Calle 170 # 13-40, Bogotá D.C.").certificacion(certificacion).evaluacion(evaluacion)
+				.politicaEntrega(politica).build();
 
 		listaProveedores.add(proveedor);
 	}
