@@ -5,11 +5,14 @@ import java.sql.SQLException;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import co.poli.edu.cguzman.modelo.AdapterNequi;
+import co.poli.edu.cguzman.modelo.AdapterPayPal;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
+import co.poli.edu.cguzman.modelo.IPago;
 import co.poli.edu.cguzman.modelo.PoliticaEntrega;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
 import co.poli.edu.cguzman.services.GenericDAO;
@@ -65,8 +68,8 @@ public class ControladorFormulario {
 	private TextArea txtarea_composite;
 
 	@FXML
-	private Label lbl_idcliente, lbl_nombrecliente, lbl_idproducto, lbl_tipoproducto, lbl_descripcionproducto,
-			lbl_calvol;
+	private Label lbl_idcliente, lbl_resultadopago, lbl_nombrecliente, lbl_idproducto, lbl_tipoproducto,
+			lbl_descripcionproducto, lbl_calvol;
 
 	@FXML
 	private ComboBox<String> comboTipoProducto;
@@ -76,16 +79,19 @@ public class ControladorFormulario {
 
 	@FXML
 	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
-			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar;
+			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar, btn_nequi, btn_PayPal;;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
-	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto, txtCalorias, txtVoltaje;
+	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto, txtCalorias, txtVoltaje, txt_Monto;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	private GenericDAO<Cliente, String> clienteDAO = new ClienteImplementacionDAO();
 	private ProductoDAO productoDAO = new ProductoImplementacionDAO();
 //	private ProductFactory productFactory = new FoodProductFactory(500);
+
+	private IPago nequiAdapter;
+	private IPago payPalAdapter;
 
 	/**
 	 * Método que inicializa la interfaz de usuario con los componentes necesarios.
@@ -113,6 +119,9 @@ public class ControladorFormulario {
 
 		// Agregar datos de ejemplo
 		tabla_Proveedores.setItems(listaProveedores);
+
+		nequiAdapter = new AdapterNequi(null);
+		payPalAdapter = new AdapterPayPal(null);
 	}
 
 	/**
@@ -450,6 +459,37 @@ public class ControladorFormulario {
 				.politicaEntrega(politica).build();
 
 		listaProveedores.add(proveedor);
+	}
+
+	@FXML
+	public void pagarConNequi() {
+		double monto = obtenerMonto();
+		if (monto > 0) {
+			String resultado = nequiAdapter.hacerPago(monto);
+			lbl_resultadopago.setText(resultado); // Mostramos el mensaje en la interfaz
+		} else {
+			lbl_resultadopago.setText("Ingrese un monto válido.");
+		}
+	}
+
+	@FXML
+	public void pagarConPayPal() {
+		double monto = obtenerMonto();
+		if (monto > 0) {
+			String resultado = payPalAdapter.hacerPago(monto);
+			lbl_resultadopago.setText(resultado); // Mostramos el mensaje en la interfaz
+		} else {
+			lbl_resultadopago.setText("Ingrese un monto válido.");
+		}
+	}
+
+	private double obtenerMonto() {
+		try {
+			return Double.parseDouble(txt_Monto.getText());
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+
 	}
 
 	private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {

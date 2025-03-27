@@ -46,5 +46,5 @@ public class PoliticaEntrega {
 		return "PoliticaEntrega [tiempoEntrega=" + tiempoEntrega + ", modoEntrega=" + modoEntrega + ", costoEnvio="
 				+ costoEnvio + "]";
 	}
-	
+
 }

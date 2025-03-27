@@ -50,11 +50,23 @@ public class Proveedor {
 		private Evaluacion evaluacion;
 		private Certificacion certificacion;
 		private PoliticaEntrega politicaEntrega;
+		
+		/**
+		 * Constructor de la clase Builder.
+		 * 
+		 * @param nit NIT del proveedor.
+		 */
 
 		public Builder nit(String nit) {
 			this.nit = nit;
 			return this;
 		}
+		
+		/**
+		 * Método para obtener el nombre del proveedor.
+		 * 
+		 * @return Nombre del proveedor.
+		 */
 
 		public Builder nombre(String nombre) {
 			this.nombre = nombre;
