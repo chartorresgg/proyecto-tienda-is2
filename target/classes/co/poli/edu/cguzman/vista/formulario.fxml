@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -57,5 +58,7 @@
             <TableColumn fx:id="colPoliticaEntrega" prefWidth="101.5999755859375" text="Política Entrega" />
         </columns>
       </TableView>
+      <Button fx:id="btn_cargar" layoutX="64.0" layoutY="293.0" mnemonicParsing="false" onAction="#inicializarEstructura" text="Cargar" />
+      <TextArea fx:id="txtarea_composite" layoutX="60.0" layoutY="329.0" prefHeight="126.0" prefWidth="291.0" promptText="Composite" />
    </children>
 </AnchorPane>
