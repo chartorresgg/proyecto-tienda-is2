@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.poli.edu.cguzman.controlador.ControladorFormulario">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.poli.edu.cguzman.controlador.ControladorFormulario">
    <children>
       <TextField fx:id="txt_id" layoutX="171.0" layoutY="105.0" promptText="Ingrese el ID" />
       <TextField fx:id="txt_nombres" layoutX="171.0" layoutY="143.0" promptText="Ingrese los nombres" />
@@ -39,10 +39,10 @@
       <Label fx:id="lbl_idproducto" layoutX="382.0" layoutY="109.0" text="ID del producto :" />
       <Label fx:id="lbl_descripcionproducto" layoutX="382.0" layoutY="147.0" text="Descripción producto :" />
       <Label fx:id="lbl_tipoproducto" layoutX="382.0" layoutY="185.0" text="Tipo de producto :" />
-      <Separator layoutX="352.0" layoutY="85.0" orientation="VERTICAL" prefHeight="345.0" prefWidth="6.0" />
+      <Separator layoutX="352.0" layoutY="85.0" orientation="VERTICAL" prefHeight="166.0" prefWidth="6.0" />
       <Label fx:id="lbl_calvol" layoutX="382.0" layoutY="224.0" text="Calorías o Voltaje :" />
       <Button fx:id="btn_clonarproducto" layoutX="515.0" layoutY="325.0" mnemonicParsing="false" onAction="#clonarProducto" prefHeight="30.0" prefWidth="70.0" text="Clonar" />
-      <TextArea fx:id="txtarea_composite" layoutX="55.0" layoutY="340.0" prefHeight="200.0" prefWidth="334.0" promptText="Composite" />
-      <Button fx:id="btn_cargar" layoutX="54.0" layoutY="294.0" mnemonicParsing="false" onAction="#inicializarEstructura" text="Cargar" />
+      <TextArea fx:id="txtarea_composite" layoutX="54.0" layoutY="306.0" prefHeight="96.0" prefWidth="434.0" promptText="Composite" />
+      <Button fx:id="btn_cargar" layoutX="54.0" layoutY="274.0" mnemonicParsing="false" onAction="#inicializarEstructura" text="Composite" />
    </children>
 </AnchorPane>
