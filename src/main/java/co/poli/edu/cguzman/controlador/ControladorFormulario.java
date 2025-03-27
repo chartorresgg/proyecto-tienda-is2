@@ -10,7 +10,6 @@ import co.poli.edu.cguzman.modelo.AdapterPayPal;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
-import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Departamento;
 import co.poli.edu.cguzman.modelo.Empleado;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
