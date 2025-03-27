@@ -443,11 +443,6 @@ public class ControladorFormulario {
 	}
 
 	@FXML
-	private void inicializarEstructura() {
-
-	}
-
-	@FXML
 	private void agregarProveedor() {
 
 		Certificacion certificacion = new Certificacion("ISO 9001", "Bureau Veritas", "CERT123");
