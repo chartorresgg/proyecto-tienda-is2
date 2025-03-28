@@ -10,8 +10,6 @@ import co.poli.edu.cguzman.modelo.AdapterPayPal;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
-
-import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Departamento;
 import co.poli.edu.cguzman.modelo.Empleado;
 
@@ -454,15 +452,21 @@ public class ControladorFormulario {
 		Evaluacion evaluacion = new Evaluacion("Alta", 4.5, "Cumple con estándares de calidad");
 		PoliticaEntrega politica = new PoliticaEntrega("5 días", "Aéreo", "$10");
 
-		Proveedor proveedor = new Proveedor.Builder().nit("900123456-7").nombre("Proveedor S.A.")
-				.direccion("Calle 170 # 13-40, Bogotá D.C.").certificacion(certificacion).evaluacion(evaluacion)
-				.politicaEntrega(politica).build();
+		Proveedor proveedor = new Proveedor.Builder()
+				.nit("900123456-7")
+				.nombre("Proveedor S.A.")
+				.direccion("Calle 170 # 13-40, Bogotá D.C.")
+				.certificacion(certificacion)
+				.evaluacion(evaluacion)
+				.politicaEntrega(politica)
+				.build();
 
 		listaProveedores.add(proveedor);
 	}
 
 	@FXML
 	public void pagarConNequi() {
+		
 		double monto = obtenerMonto();
 		if (monto > 0) {
 			String resultado = nequiAdapter.hacerPago(monto);
@@ -489,9 +493,9 @@ public class ControladorFormulario {
 		} catch (NumberFormatException e) {
 			return 0;
 		}
-		
+
 	}
-	
+
 	public void inicializarEstructura() {
 		// Crear rector
 		Empleado rector = new Empleado("Dr. Juan Pérez", "Rector");
@@ -521,18 +525,39 @@ public class ControladorFormulario {
 		facultadNegocios.agregarUnidad(coordNegocios);
 		facultadNegocios.agregarUnidad(profNegocios);
 
-		// Crear rectoría y agregar las facultades
+		// Crear Departamento de Tecnología
+		Departamento deptoTecnologia = new Departamento("Departamento de Tecnología");
+		Empleado directorTecnologia = new Empleado("MSc. Roberto Salazar", "Director de Tecnología");
+		deptoTecnologia.agregarUnidad(directorTecnologia);
+
+		// Crear subdepartamentos de Tecnología
+		Departamento equipoIA = new Departamento("Equipo de IA");
+		Departamento equipoDataScience = new Departamento("Equipo de Data Science");
+
+		// Crear empleados para los subdepartamentos
+		Empleado ingenieroIA = new Empleado("Dr. Camila Ríos", "Ingeniera de IA");
+		Empleado cientificoDatos = new Empleado("Dr. Andrés López", "Científico de Datos");
+
+		// Agregar empleados a los subdepartamentos
+		equipoIA.agregarUnidad(ingenieroIA);
+		equipoDataScience.agregarUnidad(cientificoDatos);
+
+		// Agregar subdepartamentos al Departamento de Tecnología
+		deptoTecnologia.agregarUnidad(equipoIA);
+		deptoTecnologia.agregarUnidad(equipoDataScience);
+
+		// Crear rectoría y agregar facultades y departamentos
 		Departamento rectoria = new Departamento("Rectoría");
 		rectoria.agregarUnidad(rector);
 		rectoria.agregarUnidad(facultadIngenieria);
 		rectoria.agregarUnidad(facultadSociedad);
 		rectoria.agregarUnidad(facultadNegocios);
+		rectoria.agregarUnidad(deptoTecnologia);
 
 		// Mostrar en el TextArea
 		StringBuilder builder = new StringBuilder();
 		rectoria.mostrarInfo(builder);
 		txtarea_composite.setText(builder.toString());
-
 	}
 
 	private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {

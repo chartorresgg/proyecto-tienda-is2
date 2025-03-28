@@ -1,6 +1,7 @@
 package co.poli.edu.cguzman.modelo;
 
 public class Empleado implements Unidad {
+	
     private String nombre;
     private String cargo;
 
@@ -11,6 +12,10 @@ public class Empleado implements Unidad {
 
     @Override
     public void mostrarInfo(StringBuilder builder) {
-        builder.append("Empleado: ").append(nombre).append(" - Cargo: ").append(cargo).append("\n");
+        builder.append("Empleado: ")
+        .append(nombre)
+        .append(" - Cargo: ")
+        .append(cargo)
+        .append("\n");
     }
 }

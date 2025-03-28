@@ -92,7 +92,12 @@ public class Proveedor {
 			this.politicaEntrega = politicaEntrega;
 			return this;
 		}
-
+		
+		/**
+		 * Método para construir un objeto de la clase Proveedor.
+		 * 
+		 * @return Objeto de la clase Proveedor.
+		 */
 		public Proveedor build() {
 			return new Proveedor(this);
 		}
