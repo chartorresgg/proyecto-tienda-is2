@@ -10,6 +10,9 @@ import co.poli.edu.cguzman.modelo.AdapterPayPal;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
+import co.poli.edu.cguzman.modelo.Cliente;
+import co.poli.edu.cguzman.modelo.Departamento;
+import co.poli.edu.cguzman.modelo.Empleado;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
 import co.poli.edu.cguzman.modelo.IPago;
@@ -485,6 +488,48 @@ public class ControladorFormulario {
 			return 0;
 		}
 
+	}
+
+	public void inicializarEstructura() {
+		// Crear rector
+		Empleado rector = new Empleado("Dr. Juan Pérez", "Rector");
+
+		// Crear facultades
+		Departamento facultadIngenieria = new Departamento("Facultad de Ingeniería, Diseño e Innovación");
+		Departamento facultadSociedad = new Departamento("Facultad de Sociedad, Cultura y Creatividad");
+		Departamento facultadNegocios = new Departamento("Facultad de Negocios, Gestión y Sostenibilidad");
+
+		// Crear coordinadores de facultad
+		Empleado coordIngenieria = new Empleado("Ing. María Fernández", "Coordinadora de Ingeniería");
+		Empleado coordSociedad = new Empleado("Lic. Carlos Ramírez", "Coordinador de Sociedad y Cultura");
+		Empleado coordNegocios = new Empleado("Eco. Laura Gómez", "Coordinadora de Negocios y Gestión");
+
+		// Crear profesores
+		Empleado profIngenieria = new Empleado("Dr. Luis Torres", "Profesor de Ingeniería");
+		Empleado profSociedad = new Empleado("Mtro. Andrés Morales", "Profesor de Cultura y Sociedad");
+		Empleado profNegocios = new Empleado("Lic. Sofía Herrera", "Profesor de Negocios y Gestión");
+
+		// Agregar empleados a cada facultad
+		facultadIngenieria.agregarUnidad(coordIngenieria);
+		facultadIngenieria.agregarUnidad(profIngenieria);
+
+		facultadSociedad.agregarUnidad(coordSociedad);
+		facultadSociedad.agregarUnidad(profSociedad);
+
+		facultadNegocios.agregarUnidad(coordNegocios);
+		facultadNegocios.agregarUnidad(profNegocios);
+
+		// Crear rectoría y agregar las facultades
+		Departamento rectoria = new Departamento("Rectoría");
+		rectoria.agregarUnidad(rector);
+		rectoria.agregarUnidad(facultadIngenieria);
+		rectoria.agregarUnidad(facultadSociedad);
+		rectoria.agregarUnidad(facultadNegocios);
+
+		// Mostrar en el TextArea
+		StringBuilder builder = new StringBuilder();
+		rectoria.mostrarInfo(builder);
+		txtarea_composite.setText(builder.toString());
 	}
 
 	private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
