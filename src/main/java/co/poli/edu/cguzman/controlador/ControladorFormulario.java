@@ -7,15 +7,21 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import co.poli.edu.cguzman.modelo.AdapterNequi;
 import co.poli.edu.cguzman.modelo.AdapterPayPal;
+import co.poli.edu.cguzman.modelo.CargaFragil;
+import co.poli.edu.cguzman.modelo.CargaNormal;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
 import co.poli.edu.cguzman.modelo.Departamento;
+import co.poli.edu.cguzman.modelo.Documentos;
 import co.poli.edu.cguzman.modelo.Empleado;
-
+import co.poli.edu.cguzman.modelo.Envio;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
 import co.poli.edu.cguzman.modelo.IPago;
+import co.poli.edu.cguzman.modelo.Internacional;
+import co.poli.edu.cguzman.modelo.Mercancia;
+import co.poli.edu.cguzman.modelo.Nacional;
 import co.poli.edu.cguzman.modelo.PoliticaEntrega;
 import co.poli.edu.cguzman.services.ClienteImplementacionDAO;
 import co.poli.edu.cguzman.services.GenericDAO;
@@ -68,21 +74,27 @@ public class ControladorFormulario {
 	private ObservableList<Proveedor> listaProveedores = FXCollections.observableArrayList();
 
 	@FXML
-	private TextArea txtarea_composite;
+	private TextArea txtarea_composite, txtarea_bridge;
 
 	@FXML
 	private Label lbl_idcliente, lbl_resultadopago, lbl_nombrecliente, lbl_idproducto, lbl_tipoproducto,
-			lbl_descripcionproducto, lbl_calvol;
+			lbl_descripcionproducto, lbl_calvol, lbl_tipoenvio, lbl_tipomercancia;
 
 	@FXML
 	private ComboBox<String> comboTipoProducto;
+
+	@FXML
+	private ComboBox<String> comboTipoMercancia;
+
+	@FXML
+	private ComboBox<String> comboTipoEnvio;
 
 	@FXML
 	private VBox vboxAlimento, vboxElectrico;
 
 	@FXML
 	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
-			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar, btn_nequi, btn_PayPal;;
+			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar, btn_nequi, btn_PayPal, btn_procesarEnvio;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
@@ -103,6 +115,9 @@ public class ControladorFormulario {
 	private void initialize() {
 
 		comboTipoProducto.getItems().addAll("Alimento", "Electrico"); // Agregar opciones al ComboBox
+
+		comboTipoMercancia.getItems().addAll("Documentos", "Carga Normal", "Carga Frágil");
+		comboTipoEnvio.getItems().addAll("Nacional", "Internacional");
 
 		txt_idproducto.setVisible(true);
 		txt_nombreproducto.setVisible(true);
@@ -452,21 +467,16 @@ public class ControladorFormulario {
 		Evaluacion evaluacion = new Evaluacion("Alta", 4.5, "Cumple con estándares de calidad");
 		PoliticaEntrega politica = new PoliticaEntrega("5 días", "Aéreo", "$10");
 
-		Proveedor proveedor = new Proveedor.Builder()
-				.nit("900123456-7")
-				.nombre("Proveedor S.A.")
-				.direccion("Calle 170 # 13-40, Bogotá D.C.")
-				.certificacion(certificacion)
-				.evaluacion(evaluacion)
-				.politicaEntrega(politica)
-				.build();
+		Proveedor proveedor = new Proveedor.Builder().nit("900123456-7").nombre("Proveedor S.A.")
+				.direccion("Calle 170 # 13-40, Bogotá D.C.").certificacion(certificacion).evaluacion(evaluacion)
+				.politicaEntrega(politica).build();
 
 		listaProveedores.add(proveedor);
 	}
 
 	@FXML
 	public void pagarConNequi() {
-		
+
 		double monto = obtenerMonto();
 		if (monto > 0) {
 			String resultado = nequiAdapter.hacerPago(monto);
@@ -486,7 +496,8 @@ public class ControladorFormulario {
 			lbl_resultadopago.setText("Ingrese un monto válido.");
 		}
 	}
-
+	
+	@FXML
 	private double obtenerMonto() {
 		try {
 			return Double.parseDouble(txt_Monto.getText());
@@ -496,6 +507,7 @@ public class ControladorFormulario {
 
 	}
 
+	@FXML
 	public void inicializarEstructura() {
 		// Crear rector
 		Empleado rector = new Empleado("Dr. Juan Pérez", "Rector");
@@ -571,4 +583,40 @@ public class ControladorFormulario {
 		txt_id.clear();
 		txt_nombres.clear();
 	}
+
+	// Implementación del patrón Bridge
+
+	@FXML
+    private void procesarEnvio() {
+        String tipoMercancia = comboTipoMercancia.getValue();
+        String tipoEnvio = comboTipoEnvio.getValue();
+
+        if (tipoMercancia == null || tipoEnvio == null) {
+            txtarea_bridge.setText("Por favor, seleccione una mercancía y un tipo de envío.");
+            return;
+        }
+
+        // Crear la instancia de envío
+        Envio envio = tipoEnvio.equals("Nacional") ? new Nacional() : new Internacional();
+
+        // Crear la instancia de mercancía
+        Mercancia mercancia;
+        switch (tipoMercancia) {
+            case "Documentos":
+                mercancia = new Documentos(envio);
+                break;
+            case "Carga Normal":
+                mercancia = new CargaNormal(envio);
+                break;
+            case "Carga Frágil":
+                mercancia = new CargaFragil(envio);
+                break;
+            default:
+                txtarea_bridge.setText("Error al procesar la mercancía.");
+                return;
+        }
+
+        // Mostrar el resultado en la interfaz
+        txtarea_bridge.setText(mercancia.enviar());
+    }
 }

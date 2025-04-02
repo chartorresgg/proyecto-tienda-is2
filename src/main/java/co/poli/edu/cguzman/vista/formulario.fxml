@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.poli.edu.cguzman.controlador.ControladorFormulario">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="1337.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.poli.edu.cguzman.controlador.ControladorFormulario">
 
    <children>
       <TextField fx:id="txt_id" layoutX="171.0" layoutY="105.0" promptText="Ingrese el ID" />
@@ -66,6 +66,12 @@
       <Button fx:id="btn_clonarproducto" layoutX="515.0" layoutY="325.0" mnemonicParsing="false" onAction="#clonarProducto" prefHeight="30.0" prefWidth="70.0" text="Clonar" />
       <TextArea fx:id="txtarea_composite" layoutX="54.0" layoutY="306.0" prefHeight="166.0" prefWidth="287.0" promptText="Composite" />
       <Button fx:id="btn_cargar" layoutX="54.0" layoutY="274.0" mnemonicParsing="false" onAction="#inicializarEstructura" text="Composite" />
+      <ComboBox fx:id="comboTipoMercancia" layoutX="905.0" layoutY="105.0" prefWidth="150.0" promptText="Seleccione" />
+      <ComboBox fx:id="comboTipoEnvio" layoutX="905.0" layoutY="143.0" prefWidth="150.0" promptText="Seleccione" />
+      <Button fx:id="btn_procesarEnvio" layoutX="813.0" layoutY="183.0" mnemonicParsing="false" onAction="#procesarEnvio" prefHeight="26.0" prefWidth="150.0" text="Procesar envío" />
+      <Label fx:id="lbl_tipomercancia" layoutX="719.0" layoutY="109.0" text="Seleccione el tipo de mercancía:" />
+      <Label fx:id="lbl_tipoenvio" layoutX="719.0" layoutY="147.0" text="Seleccione el tipo de envío:" />
+      <TextArea fx:id="txtarea_bridge" layoutX="719.0" layoutY="221.0" prefHeight="67.0" prefWidth="335.0" promptText="Resultado del envío" />
 
    </children>
 </AnchorPane>
