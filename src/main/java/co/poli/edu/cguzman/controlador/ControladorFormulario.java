@@ -9,13 +9,17 @@ import co.poli.edu.cguzman.modelo.AdapterNequi;
 import co.poli.edu.cguzman.modelo.AdapterPayPal;
 import co.poli.edu.cguzman.modelo.CargaFragil;
 import co.poli.edu.cguzman.modelo.CargaNormal;
+import co.poli.edu.cguzman.modelo.CarritoBasico;
+import co.poli.edu.cguzman.modelo.CarritoCompras;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
 import co.poli.edu.cguzman.modelo.Departamento;
+import co.poli.edu.cguzman.modelo.Descuento;
 import co.poli.edu.cguzman.modelo.Documentos;
 import co.poli.edu.cguzman.modelo.Empleado;
 import co.poli.edu.cguzman.modelo.Envio;
+import co.poli.edu.cguzman.modelo.EnvioGratis;
 import co.poli.edu.cguzman.modelo.FactoryProductElectric;
 import co.poli.edu.cguzman.modelo.FactoryProductFood;
 import co.poli.edu.cguzman.modelo.IPago;
@@ -31,6 +35,7 @@ import co.poli.edu.cguzman.modelo.Producto;
 import co.poli.edu.cguzman.modelo.ProductoAlimento;
 import co.poli.edu.cguzman.modelo.ProductoElectrico;
 import co.poli.edu.cguzman.modelo.Proveedor;
+import co.poli.edu.cguzman.modelo.PuntosRecompensa;
 import co.poli.edu.cguzman.services.ProductoDAO;
 import co.poli.edu.cguzman.services.ProductoImplementacionDAO;
 import javafx.collections.FXCollections;
@@ -39,6 +44,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -78,7 +84,8 @@ public class ControladorFormulario {
 
 	@FXML
 	private Label lbl_idcliente, lbl_resultadopago, lbl_nombrecliente, lbl_idproducto, lbl_tipoproducto,
-			lbl_descripcionproducto, lbl_calvol, lbl_tipoenvio, lbl_tipomercancia;
+			lbl_descripcionproducto, lbl_calvol, lbl_tipoenvio, lbl_tipomercancia, lbl_carritocompras, lbl_preciobase,
+			lbl_preciofinal;
 
 	@FXML
 	private ComboBox<String> comboTipoProducto;
@@ -94,11 +101,16 @@ public class ControladorFormulario {
 
 	@FXML
 	private Button btn_guardar, btn_consultar, btn_eliminar, btn_actualizar, btn_guardar2, btn_consultar2,
-			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar, btn_nequi, btn_PayPal, btn_procesarEnvio;
+			btn_eliminar2, btn_actualizar2, btn_clonarProducto, btn_cargar, btn_nequi, btn_PayPal, btn_procesarEnvio,
+			btn_calcularprecio;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	@FXML
-	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto, txtCalorias, txtVoltaje, txt_Monto;
+	private TextField txt_id, txt_nombres, txt_idproducto, txt_nombreproducto, txtCalorias, txtVoltaje, txt_Monto,
+			txt_preciobase;
+
+	@FXML
+	private CheckBox chk_descuento, chk_enviogratis, chk_puntos;
 
 	// Se usa la interfaz GenericDAO, para aplicar polimorfismo.
 	private GenericDAO<Cliente, String> clienteDAO = new ClienteImplementacionDAO();
@@ -496,7 +508,7 @@ public class ControladorFormulario {
 			lbl_resultadopago.setText("Ingrese un monto válido.");
 		}
 	}
-	
+
 	@FXML
 	private double obtenerMonto() {
 		try {
@@ -587,36 +599,60 @@ public class ControladorFormulario {
 	// Implementación del patrón Bridge
 
 	@FXML
-    private void procesarEnvio() {
-        String tipoMercancia = comboTipoMercancia.getValue();
-        String tipoEnvio = comboTipoEnvio.getValue();
+	private void procesarEnvio() {
+		String tipoMercancia = comboTipoMercancia.getValue();
+		String tipoEnvio = comboTipoEnvio.getValue();
 
-        if (tipoMercancia == null || tipoEnvio == null) {
-            txtarea_bridge.setText("Por favor, seleccione una mercancía y un tipo de envío.");
-            return;
-        }
+		if (tipoMercancia == null || tipoEnvio == null) {
+			txtarea_bridge.setText("Por favor, seleccione una mercancía y un tipo de envío.");
+			return;
+		}
 
-        // Crear la instancia de envío
-        Envio envio = tipoEnvio.equals("Nacional") ? new Nacional() : new Internacional();
+		// Crear la instancia de envío
+		Envio envio = tipoEnvio.equals("Nacional") ? new Nacional() : new Internacional();
 
-        // Crear la instancia de mercancía
-        Mercancia mercancia;
-        switch (tipoMercancia) {
-            case "Documentos":
-                mercancia = new Documentos(envio);
-                break;
-            case "Carga Normal":
-                mercancia = new CargaNormal(envio);
-                break;
-            case "Carga Frágil":
-                mercancia = new CargaFragil(envio);
-                break;
-            default:
-                txtarea_bridge.setText("Error al procesar la mercancía.");
-                return;
-        }
+		// Crear la instancia de mercancía
+		Mercancia mercancia;
+		switch (tipoMercancia) {
+		case "Documentos":
+			mercancia = new Documentos(envio);
+			break;
+		case "Carga Normal":
+			mercancia = new CargaNormal(envio);
+			break;
+		case "Carga Frágil":
+			mercancia = new CargaFragil(envio);
+			break;
+		default:
+			txtarea_bridge.setText("Error al procesar la mercancía.");
+			return;
+		}
 
-        // Mostrar el resultado en la interfaz
-        txtarea_bridge.setText(mercancia.enviar());
-    }
+		// Mostrar el resultado en la interfaz
+		txtarea_bridge.setText(mercancia.enviar());
+	}
+
+	// Implementación del patrón Decorator
+
+	@FXML
+	private void aplicarDecoradores() {
+
+		double precioBase = Double.parseDouble(txt_preciobase.getText());
+		CarritoCompras carrito = new CarritoBasico(precioBase);
+
+		if (chk_descuento.isSelected()) {
+			carrito = new Descuento(carrito, 0.10); // 10% de descuento
+		}
+
+		if (chk_enviogratis.isSelected()) {
+			carrito = new EnvioGratis(carrito);
+		}
+
+		if (chk_puntos.isSelected()) {
+			carrito = new PuntosRecompensa(carrito, 100); // 100 puntos de recompensa
+		}
+
+		lbl_preciofinal.setText(carrito.obtenerDescripcion() + " -> Precio final: " + carrito.obtenerTotalCompra());
+
+	}
 }

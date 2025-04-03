@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -72,6 +73,17 @@
       <Label fx:id="lbl_tipomercancia" layoutX="719.0" layoutY="109.0" text="Seleccione el tipo de mercancía:" />
       <Label fx:id="lbl_tipoenvio" layoutX="719.0" layoutY="147.0" text="Seleccione el tipo de envío:" />
       <TextArea fx:id="txtarea_bridge" layoutX="719.0" layoutY="221.0" prefHeight="67.0" prefWidth="335.0" promptText="Resultado del envío" />
+      <Label fx:id="lbl_carritocompras" layoutX="719.0" layoutY="347.0" text="Carrito de compras" />
+      <TextField fx:id="txt_preciobase" layoutX="821.0" layoutY="376.0" prefHeight="26.0" prefWidth="130.0" promptText="Precio base del carrito" />
+      <Label fx:id="lbl_preciobase" layoutX="719.0" layoutY="380.0" text="Precio base:" />
+      <CheckBox fx:id="chk_descuento" layoutX="719.0" layoutY="416.0" mnemonicParsing="false" text="Descuento" />
+      <CheckBox fx:id="chk_enviogratis" layoutX="830.0" layoutY="416.0" mnemonicParsing="false" text="Envío gratis" />
+      <CheckBox fx:id="chk_puntos" layoutX="950.0" layoutY="416.0" mnemonicParsing="false" text="Puntos" />
+      <Label fx:id="lbl_preciofinal" layoutX="720.0" layoutY="512.0" text="Precio final:" />
+      <Button fx:id="btn_calcularprecio" layoutX="839.0" layoutY="467.0" mnemonicParsing="false" onAction="#aplicarDecoradores" text="Calcular precio" />
+      <Label fx:id="lbl_preciofinal" layoutX="807.0" layoutY="512.0" />
+      <Separator layoutX="721.0" layoutY="320.0" prefHeight="3.0" prefWidth="335.0" />
+      <Separator layoutX="693.0" layoutY="103.0" orientation="VERTICAL" prefHeight="575.0" prefWidth="0.0" />
 
    </children>
 </AnchorPane>
