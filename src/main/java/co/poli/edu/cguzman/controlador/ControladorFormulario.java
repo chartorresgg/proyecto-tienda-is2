@@ -452,9 +452,14 @@ public class ControladorFormulario {
 		Evaluacion evaluacion = new Evaluacion("Alta", 4.5, "Cumple con estándares de calidad");
 		PoliticaEntrega politica = new PoliticaEntrega("5 días", "Aéreo", "$10");
 
-		Proveedor proveedor = new Proveedor.Builder().nit("900123456-7").nombre("Proveedor S.A.")
-				.direccion("Calle 170 # 13-40, Bogotá D.C.").certificacion(certificacion).evaluacion(evaluacion)
-				.politicaEntrega(politica).build();
+		Proveedor proveedor = new Proveedor.Builder()
+				.nit("900123456-7")
+				.nombre("Proveedor S.A.")
+				.direccion("Calle 170 # 13-40, Bogotá D.C.")
+				.certificacion(certificacion)
+				.evaluacion(evaluacion)
+				.politicaEntrega(politica)
+				.build();// construeye el objeto
 
 		listaProveedores.add(proveedor);
 	}
@@ -491,13 +496,20 @@ public class ControladorFormulario {
 	}
 
 	public void inicializarEstructura() {
-		// Crear rector
-		Empleado rector = new Empleado("Dr. Juan Pérez", "Rector");
+		// Crear rectoría y agregar las facultades
+		Departamento rectoria = new Departamento("Rectoría");
 
 		// Crear facultades
 		Departamento facultadIngenieria = new Departamento("Facultad de Ingeniería, Diseño e Innovación");
 		Departamento facultadSociedad = new Departamento("Facultad de Sociedad, Cultura y Creatividad");
 		Departamento facultadNegocios = new Departamento("Facultad de Negocios, Gestión y Sostenibilidad");
+
+		rectoria.agregarUnidad(facultadIngenieria);
+		rectoria.agregarUnidad(facultadSociedad);
+		rectoria.agregarUnidad(facultadNegocios);
+
+		// Crear rector
+		Empleado rector = new Empleado("Dr. Juan Pérez", "Rector");
 
 		// Crear coordinadores de facultad
 		Empleado coordIngenieria = new Empleado("Ing. María Fernández", "Coordinadora de Ingeniería");
@@ -509,22 +521,14 @@ public class ControladorFormulario {
 		Empleado profSociedad = new Empleado("Mtro. Andrés Morales", "Profesor de Cultura y Sociedad");
 		Empleado profNegocios = new Empleado("Lic. Sofía Herrera", "Profesor de Negocios y Gestión");
 
-		// Agregar empleados a cada facultad
+		// Agregar empleados a cada departamento
+		rectoria.agregarUnidad(rector);
 		facultadIngenieria.agregarUnidad(coordIngenieria);
 		facultadIngenieria.agregarUnidad(profIngenieria);
-
 		facultadSociedad.agregarUnidad(coordSociedad);
 		facultadSociedad.agregarUnidad(profSociedad);
-
 		facultadNegocios.agregarUnidad(coordNegocios);
 		facultadNegocios.agregarUnidad(profNegocios);
-
-		// Crear rectoría y agregar las facultades
-		Departamento rectoria = new Departamento("Rectoría");
-		rectoria.agregarUnidad(rector);
-		rectoria.agregarUnidad(facultadIngenieria);
-		rectoria.agregarUnidad(facultadSociedad);
-		rectoria.agregarUnidad(facultadNegocios);
 
 		// Mostrar en el TextArea
 		StringBuilder builder = new StringBuilder();

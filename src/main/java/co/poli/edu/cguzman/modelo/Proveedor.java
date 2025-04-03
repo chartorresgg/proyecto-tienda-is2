@@ -41,6 +41,7 @@ public class Proveedor {
 	 * Método para obtener el NIT del proveedor.
 	 * 
 	 * @return NIT del proveedor.
+	 * clase innerStatic 
 	 */
 	public static class Builder {
 
@@ -93,6 +94,10 @@ public class Proveedor {
 			return this;
 		}
 
+		/**
+		 * Método que construye todo el objeto
+		 * @return
+		 */
 		public Proveedor build() {
 			return new Proveedor(this);
 		}
