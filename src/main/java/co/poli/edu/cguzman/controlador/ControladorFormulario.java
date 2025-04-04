@@ -9,11 +9,13 @@ import co.poli.edu.cguzman.modelo.AdapterNequi;
 import co.poli.edu.cguzman.modelo.AdapterPayPal;
 import co.poli.edu.cguzman.modelo.CargaFragil;
 import co.poli.edu.cguzman.modelo.CargaNormal;
+import co.poli.edu.cguzman.modelo.CargaPeligrosa;
 import co.poli.edu.cguzman.modelo.CarritoBasico;
 import co.poli.edu.cguzman.modelo.CarritoCompras;
 import co.poli.edu.cguzman.modelo.Certificacion;
 import co.poli.edu.cguzman.modelo.Cliente;
 import co.poli.edu.cguzman.modelo.Evaluacion;
+import co.poli.edu.cguzman.modelo.Express;
 import co.poli.edu.cguzman.modelo.Departamento;
 import co.poli.edu.cguzman.modelo.Descuento;
 import co.poli.edu.cguzman.modelo.Documentos;
@@ -129,8 +131,8 @@ public class ControladorFormulario {
 
 		comboTipoProducto.getItems().addAll("Alimento", "Electrico"); // Agregar opciones al ComboBox
 
-		comboTipoMercancia.getItems().addAll("Documentos", "Carga Normal", "Carga Frágil");
-		comboTipoEnvio.getItems().addAll("Nacional", "Internacional");
+		comboTipoMercancia.getItems().addAll("Documentos", "Carga Normal", "Carga Frágil", "Carga Peligrosa");
+		comboTipoEnvio.getItems().addAll("Nacional", "Internacional", "Express");
 
 		txt_idproducto.setVisible(true);
 		txt_nombreproducto.setVisible(true);
@@ -612,8 +614,21 @@ public class ControladorFormulario {
 			return;
 		}
 
-		// Crear la instancia de envío
-		Envio envio = tipoEnvio.equals("Nacional") ? new Nacional() : new Internacional();
+		Envio envio;
+
+		if (tipoEnvio.equals("Nacional")) {
+			envio = new Nacional();
+		}
+
+		else if (tipoEnvio.equals("Internacional")) {
+			envio = new Internacional();
+		}
+
+		else if (tipoEnvio.equals("Express")) {
+			envio = new Express();
+		} else {
+			throw new IllegalArgumentException("Tipo de envío no reconocido: " + tipoEnvio);
+		}
 
 		// Crear la instancia de mercancía
 		Mercancia mercancia;
@@ -626,6 +641,9 @@ public class ControladorFormulario {
 			break;
 		case "Carga Frágil":
 			mercancia = new CargaFragil(envio);
+			break;
+		case "Carga Peligrosa":
+			mercancia = new CargaPeligrosa(envio); // Cambiar a la clase correspondiente
 			break;
 		default:
 			txtarea_bridge.setText("Error al procesar la mercancía.");
@@ -645,6 +663,7 @@ public class ControladorFormulario {
 	private void aplicarDecoradores() {
 		try {
 			double precioBase = Double.parseDouble(txt_preciobase.getText());
+
 			CarritoCompras carrito = new CarritoBasico(precioBase);
 
 			if (chk_descuento.isSelected()) {

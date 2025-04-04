@@ -2,7 +2,7 @@ package co.poli.edu.cguzman.modelo;
 
 public class Descuento extends CarritoDecorador {
 
-	private double montoDescuento; // Cambio de "porcentajeDescuento" a "montoDescuento"
+	private double montoDescuento;
 
 	public Descuento(CarritoCompras carrito, double montoDescuento) {
 		super(carrito);

@@ -1,5 +1,9 @@
 package co.poli.edu.cguzman.modelo;
 
+/**
+ * Clase abstracta que representa un decorador para el carrito de compras.
+ * Implementa la interfaz CarritoCompras.
+ */
 public abstract class CarritoDecorador implements CarritoCompras {
 	
 	protected CarritoCompras carritoDecorador;
