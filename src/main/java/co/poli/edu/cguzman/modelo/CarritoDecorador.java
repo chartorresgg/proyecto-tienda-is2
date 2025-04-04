@@ -8,10 +8,12 @@ public abstract class CarritoDecorador implements CarritoCompras {
 		this.carritoDecorador = carrito;
 	}
 	
+	@Override
 	public String obtenerDescripcion() {
 		return carritoDecorador.obtenerDescripcion();
 	}
 	
+	@Override
 	public double obtenerTotalCompra() {
 		return carritoDecorador.obtenerTotalCompra();
 	}

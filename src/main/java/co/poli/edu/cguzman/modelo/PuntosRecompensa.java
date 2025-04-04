@@ -10,15 +10,11 @@ public class PuntosRecompensa extends CarritoDecorador {
 	}
 	
 	public String obtenerDescripcion() {
-		return carritoDecorador.obtenerDescripcion() + ", Puntos de recompensa: " + puntos;
+		return super.obtenerDescripcion() + ", con " + puntos + " puntos de recompensa";
 	}
 	
 	public double obtenerTotalCompra() {
-		return carritoDecorador.obtenerTotalCompra();
+		return super.obtenerTotalCompra();
 	}
 	
-	public int getPuntos() {
-		return puntos;
-	}
-
 }

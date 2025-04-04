@@ -79,11 +79,17 @@
       <CheckBox fx:id="chk_descuento" layoutX="719.0" layoutY="416.0" mnemonicParsing="false" text="Descuento" />
       <CheckBox fx:id="chk_enviogratis" layoutX="830.0" layoutY="416.0" mnemonicParsing="false" text="Envío gratis" />
       <CheckBox fx:id="chk_puntos" layoutX="950.0" layoutY="416.0" mnemonicParsing="false" text="Puntos" />
-      <Label fx:id="lbl_preciofinal" layoutX="720.0" layoutY="512.0" text="Precio final:" />
+      <Label fx:id="lbl_tagpreciofinal" layoutX="720.0" layoutY="510.0" text="Precio final:" />
       <Button fx:id="btn_calcularprecio" layoutX="839.0" layoutY="467.0" mnemonicParsing="false" onAction="#aplicarDecoradores" text="Calcular precio" />
-      <Label fx:id="lbl_preciofinal" layoutX="807.0" layoutY="512.0" />
+      <Label fx:id="lbl_preciofinal" layoutX="821.0" layoutY="510.0" />
       <Separator layoutX="721.0" layoutY="320.0" prefHeight="3.0" prefWidth="335.0" />
       <Separator layoutX="693.0" layoutY="103.0" orientation="VERTICAL" prefHeight="575.0" prefWidth="0.0" />
+      <Label fx:id="lbl_tagdescuento" layoutX="720.0" layoutY="535.0" text="Descuento:" />
+      <Label fx:id="lbl_tagenviogratis" layoutX="720.0" layoutY="560.0" text="Envío gratis:" />
+      <Label fx:id="lbl_tagpuntosganados" layoutX="720.0" layoutY="585.0" text="Puntos ganados:" />
+      <Label fx:id="lbl_descuento" layoutX="821.0" layoutY="535.0" />
+      <Label fx:id="lbl_enviogratis" layoutX="821.0" layoutY="560.0" />
+      <Label fx:id="lbl_puntosganados" layoutX="821.0" layoutY="585.0" />
 
    </children>
 </AnchorPane>

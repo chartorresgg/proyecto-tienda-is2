@@ -85,7 +85,8 @@ public class ControladorFormulario {
 	@FXML
 	private Label lbl_idcliente, lbl_resultadopago, lbl_nombrecliente, lbl_idproducto, lbl_tipoproducto,
 			lbl_descripcionproducto, lbl_calvol, lbl_tipoenvio, lbl_tipomercancia, lbl_carritocompras, lbl_preciobase,
-			lbl_preciofinal;
+			lbl_preciofinal, lbl_puntosganados, lbl_enviogratis, lbl_descuento, lbl_tagpuntosganados,
+			lbl_tagenviogratis, lbl_tagdescuento, lbl_tagpreciofinal;
 
 	@FXML
 	private ComboBox<String> comboTipoProducto;
@@ -598,6 +599,9 @@ public class ControladorFormulario {
 
 	// Implementación del patrón Bridge
 
+	/**
+	 * Método para procesar el envío de mercancía.
+	 */
 	@FXML
 	private void procesarEnvio() {
 		String tipoMercancia = comboTipoMercancia.getValue();
@@ -634,25 +638,33 @@ public class ControladorFormulario {
 
 	// Implementación del patrón Decorator
 
+	/**
+	 * Método para aplicar los decoradores al carrito de compras.
+	 */
 	@FXML
 	private void aplicarDecoradores() {
+		try {
+			double precioBase = Double.parseDouble(txt_preciobase.getText());
+			CarritoCompras carrito = new CarritoBasico(precioBase);
 
-		double precioBase = Double.parseDouble(txt_preciobase.getText());
-		CarritoCompras carrito = new CarritoBasico(precioBase);
+			if (chk_descuento.isSelected()) {
+				carrito = new Descuento(carrito, 10000);
+			}
 
-		if (chk_descuento.isSelected()) {
-			carrito = new Descuento(carrito, 0.10); // 10% de descuento
+			if (chk_enviogratis.isSelected()) {
+				carrito = new EnvioGratis(carrito);
+			}
+
+			if (chk_puntos.isSelected()) {
+				carrito = new PuntosRecompensa(carrito, 100);
+			}
+
+			lbl_preciofinal.setText(carrito.obtenerDescripcion() + " → Precio final: $" + carrito.obtenerTotalCompra());
+			lbl_descuento.setText(chk_descuento.isSelected() ? "Sí" : "No");
+			lbl_enviogratis.setText(chk_enviogratis.isSelected() ? "Sí" : "No");
+			lbl_puntosganados.setText(chk_puntos.isSelected() ? "Ganaste 100 puntos" : "No ganaste puntos");
+		} catch (NumberFormatException e) {
+			lbl_preciofinal.setText("❌ Error: Ingresa un número válido.");
 		}
-
-		if (chk_enviogratis.isSelected()) {
-			carrito = new EnvioGratis(carrito);
-		}
-
-		if (chk_puntos.isSelected()) {
-			carrito = new PuntosRecompensa(carrito, 100); // 100 puntos de recompensa
-		}
-
-		lbl_preciofinal.setText(carrito.obtenerDescripcion() + " -> Precio final: " + carrito.obtenerTotalCompra());
-
 	}
 }
